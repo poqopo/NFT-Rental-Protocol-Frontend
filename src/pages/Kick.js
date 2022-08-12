@@ -1,0 +1,15 @@
+import { Link, useLocation } from "react-router-dom";
+import Kicklist from "../components/kicklist";
+
+function Kick() {
+  const location = useLocation();
+    const currentAddress = window
+
+  return (
+    <div class="m-32 h-full bg-gray-300 bg-cover px-5 py-5 space-y-10">
+      <Kicklist/>
+    </div>
+  );
+}
+
+export default Kick;

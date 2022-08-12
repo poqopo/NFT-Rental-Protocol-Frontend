@@ -2,9 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import Itemlist from "../components/itemlist";
 
 function Home() {
-  const location = useLocation();
-  console.log(location);
-
   return (
     <div class="ml-72">
       <div class="flex py-20 w-full h-1/3 place-content-center ">

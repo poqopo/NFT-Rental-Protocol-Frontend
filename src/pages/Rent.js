@@ -30,7 +30,7 @@ function Rent() {
         <img class="px-10 max-w-sm " src={`../../${item.NFTimage}`} alt="Workflow" />
         <div class="flex flex-col space-y-10">
           <p>
-            Collection Address : {item.Collectiontitle}, TokenID :{" "}
+            Collection Name : {item.Collectiontitle}, TokenID :{" "}
             {item.TokenID}
           </p>
           <p>HolderAddress : {item.HolderAddress}</p>
