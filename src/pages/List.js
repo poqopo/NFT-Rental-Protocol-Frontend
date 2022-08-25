@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { daytoblock, listNFT } from "../utils/contract";
+import { daytoblock, listNFT, approve } from "../utils/contract";
 
 function List() {
   const [collectionaddr, setCollectionAddr] = useState();
@@ -18,7 +18,7 @@ function List() {
 
   const list = async () => {
     const listblock = await daytoblock(maxrent);
-    await listNFT(collectionaddr, collattoken, tokenid, listblock, collatamount, (rentfee / listblock))
+    await listNFT(collectionaddr, collattoken, tokenid, listblock, collatamount, parseInt(rentfee / listblock))
   }
 
   return (
@@ -65,6 +65,12 @@ function List() {
           ></input>
         </div>
       </div>
+        <button 
+          class="block m-auto px-8 py-2 text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
+          onClick={() => approve(collectionaddr, tokenid)}
+        >
+          approve!
+        </button>
         <button 
           class="block m-auto px-8 py-2 text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
           onClick={list}

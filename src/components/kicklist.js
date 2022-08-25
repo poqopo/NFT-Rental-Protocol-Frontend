@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import database from "./database";
+import database from "./db/database";
 import { kickNFT } from "../utils/contract";
 
 function kicklist() {

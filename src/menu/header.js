@@ -50,13 +50,17 @@ function Header() {
     return window.klaytn.selectedAddress;
   }
 
+  async function test() {
+    
+  }
+
 
   return (
     <nav class="bg-white dark:bg-gray-800  shadow py-5 ">
       <div class="max-w-full mx-auto px-8">
         <div class="flex items-center justify-between">
           <div class=" flex items-center w-2/3">
-            <a class="flex-shrink-0" href="/Home">
+            <a class="flex-shrink-0" href="/">
               <img class="h-8 w-8" src="/logo512.png" alt="Workflow" />
             </a>
             <div class="md:block ml-8 w-3/4">
@@ -69,7 +73,7 @@ function Header() {
                 ></input>
                 <button
                   class="flex-initial ml-3 px-8 py-2 text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-                  type="submit"
+                  onClick={test}
                 >
                   Search
                 </button>
@@ -80,7 +84,7 @@ function Header() {
             <div class="px-8 flex items-baseline justify-between space-x-4">
               <a
                 class="text-gray-300 hover:text-gray-800 px-3 py-2 rounded-md text-md font-medium"
-                href="/Home"
+                href="/"
               >
                 Home
               </a>

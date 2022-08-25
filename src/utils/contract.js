@@ -1,9 +1,22 @@
 import Caver from "caver-js";
 import rentjson from "./RentERC721.json"
+import erc721json from "./ERC721.json"
 
 
 const caver = new Caver(window.klaytn)
-const rentcontract = new caver.klay.Contract(rentjson.abi, "0x77A625ED63240c514b4fBBC9A2Bae971f4C58942")
+const rentcontract = new caver.klay.Contract(rentjson.abi, "0x208291a2279882Cb6aC238977735eddd5d6e283C")
+
+
+export async function approve(collection, tokenid){
+    try {
+        const collection_address = new caver.klay.Contract(erc721json.abi, collection)
+        await collection_address.methods.approve(rentcontract._address, tokenid)
+        .send({
+          from: window.klaytn.selectedAddress,
+          gas: 3000000
+        })
+    } catch(e) {console.log(e)} 
+}
 
 export async function rent(collection, tokenid, rentduration){
     try {
@@ -28,6 +41,19 @@ export async function listNFT(collection, collat, tokenid, maxrentduration, coll
 export async function kickNFT(collection, tokenid){
     try {
         await rentcontract.methods.kick(collection, tokenid)
+        .send({
+          from: window.klaytn.selectedAddress,
+          gas: 3000000
+        })
+    } catch(e) {console.log(e)} 
+}
+
+
+export async function test() {
+    const nftaddr = "0x080C99eab039139279Fd57fC2057799c21783B91"
+    const tokenid = 2
+    try {
+        await rentcontract.methods.kick(nftaddr, tokenid)
         .send({
           from: window.klaytn.selectedAddress,
           gas: 3000000

@@ -5,17 +5,20 @@ import ItemDetail from "./pages/ItemDetail";
 import List from "./pages/List"
 import Mypage from "./pages/Mypage";
 import Kick from "./pages/Kick";
+// import Test from "./pages/test";
+
 
 function App() {
   return (
     <Router>
       <Header />
       <Routes>
-        <Route path="/Home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/:contractaddress/:tokenid/:detail" element={<ItemDetail />}/>
         <Route path="/list" element={<List />}/>
         <Route path="/mypage/:useraddress" element={<Mypage />}/>
         <Route path="/Kick" element={<Kick />}/>
+        {/* <Route path="/Test" element={<Test />}/> */}
       </Routes>
     </Router>
   );

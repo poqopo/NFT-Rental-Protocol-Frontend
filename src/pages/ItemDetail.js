@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import database from "../components/database";
+import database from "../components/db/database";
 import { rent, daytoblock, kickNFT } from "../utils/contract";
 
 function ItemDetail() {
