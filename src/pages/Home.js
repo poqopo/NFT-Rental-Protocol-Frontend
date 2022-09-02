@@ -8,7 +8,6 @@ const StyledHome = styled.div`
   border-radius: 30px;
   margin-top: 30px;
   display : flex;
-
 `;
 
 const ListButton = styled.div`

@@ -1,25 +1,110 @@
-import { Link } from "react-router-dom";
-import Itemlist from "../components/itemlist";
+import { useState } from "react";
+import { daytoblock, listNFT, approve } from "../Utils/contract";
+import styled from "styled-components";
 
-function Home() {
+const StyledList = styled.div`
+ margin : 5% 10%;
+ width : 33%
+ height : 100%
+ border: 1px solid blue;
+ border-radius: 30px;
+ text-align : center;
+ font-size: 18px;
+ font-weight: 800;
+ background-color : skyblue;
+`;
+
+const Items = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 2% 0;
+`;
+
+const Item = styled.div`
+  display: flex;
+  padding 1% 15%;
+  text-align: start;
+  justify-content: space-between;
+`;
+
+function List() {
+  const [collectionaddr, setCollectionAddr] = useState();
+  const [tokenid, setTokenId] = useState();
+  const [collattoken, setCollattoken] = useState();
+  const [collatamount, setCollatamount] = useState();
+  const [maxrent, setMaxRent] = useState();
+  const [rentfee, setRentfee] = useState();
+
+  const onChangecolladdr = (e) => setCollectionAddr(e.target.value);
+  const onChangetokenid = (e) => setTokenId(e.target.value);
+  const onChangecollattoken = (e) => setCollattoken(e.target.value);
+  const onChangecollatamount = (e) => setCollatamount(e.target.value);
+  const onChangemaxrent = (e) => setMaxRent(e.target.value);
+  const onChangerentfee = (e) => setRentfee(e.target.value);
+
+  const list = async () => {
+    const listblock = await daytoblock(maxrent);
+    await listNFT(
+      collectionaddr,
+      collattoken,
+      tokenid,
+      listblock,
+      collatamount,
+      parseInt(rentfee / listblock)
+    );
+  };
+
   return (
-    <div class="ml-72">
-      <div class="flex py-20 w-full h-1/3 place-content-center ">
-        <div class="flex flex-row w-1/2 px-5 py-8 bg-gray-300">
-          <p class="w-3/4">
-            Do you want to list your NFT for addtional profit? 
-            click the green button!
-          </p>
-            <Link to="/list" class="flex w-1/4 bg-green-200 place-content-center items-center ">
-              <p>list NFT</p>
-            </Link>
-        </div>
-      </div>
-      <div class="mr-5 h-full bg-gray-300 bg-cover px-5 py-5">
-        <Itemlist></Itemlist>
-      </div>
-    </div>
+    <StyledList>
+      <h3 class="text-center">Fill in the blank to list your NFT!</h3>
+      <Items>
+        <Item class="flex flex-row place-content-between">
+          <div>컬렉션 주소를 입력해주세요.</div>
+          <div>
+            <input
+              placeholder="Contract Address"
+              onChange={onChangecolladdr}
+            ></input>
+          </div>
+        </Item>
+        <Item class="flex flex-row place-content-between">
+          <div>토큰 ID를 입력해주세요.</div>
+          <input placeholder="token id" onChange={onChangetokenid}></input>
+        </Item>
+        <Item class="flex flex-row place-content-between">
+          <div>담보토큰 주소를 입력해주세요.</div>
+          <input
+            placeholder="Collateral token"
+            onChange={onChangecollattoken}
+          ></input>
+        </Item>
+        <Item class="flex flex-row place-content-between">
+          <div>담보로 받을 토큰 양을 입력해주세요.</div>
+          <input
+            placeholder="Collateral Amount"
+            onChange={onChangecollatamount}
+          ></input>
+        </Item>
+        <Item class="flex flex-row place-content-between">
+          <div>최대 담보 기간을 입력해주세요 </div>
+          <input
+            placeholder="Maxrent Duration"
+            onChange={onChangemaxrent}
+          ></input>
+        </Item>
+        <Item class="flex flex-row place-content-between">
+          <div>일당 받을 렌탈료를 입력해주세요.</div>
+          <input
+            placeholder="Maxrent Duration"
+            onChange={onChangerentfee}
+          ></input>
+        </Item>
+      </Items>
+      <button onClick={() => approve(collectionaddr, tokenid)}>approve!</button>
+      <button onClick={list}>List!</button>
+    </StyledList>
   );
 }
 
-export default Home;
+export default List;

@@ -5,6 +5,7 @@ const StyledMenu = styled.div`
   border-radius: 30px;
   text-align: center;
   width: 20%;
+  height : 100%;
   max-width: 300px;
   display: flex;
   flex-direction: column;

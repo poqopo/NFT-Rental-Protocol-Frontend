@@ -107,7 +107,7 @@ function Header() {
            onClick={isWalletConnected ? () => "" : connectKaikas}
         >
           {isWalletConnected ? (
-            <Link to={`/mypage/${currentAddress}`}>
+            <Link to={`/Mypage/${currentAddress}`}>
               {currentAddress.slice(0, 10)}
             </Link>
           ) : (
