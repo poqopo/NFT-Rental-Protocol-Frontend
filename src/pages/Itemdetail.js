@@ -19,7 +19,7 @@ function ItemDetail() {
   
   return (
     <StyledItemdetail>
-      <Detail />
+      <Detail type={params.detail} contract_address={params.contractaddress} token_id={params.tokenid}/>
     </StyledItemdetail>
   );
 }

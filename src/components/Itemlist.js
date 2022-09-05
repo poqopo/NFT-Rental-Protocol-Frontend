@@ -43,7 +43,6 @@ function Itemlist({ type, link }) {
         console.log("실패");
       });
   }
-  console.log(type)
 
   useEffect(() => {
     searchApi();

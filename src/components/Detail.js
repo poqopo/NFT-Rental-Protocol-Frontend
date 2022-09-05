@@ -43,23 +43,24 @@ const StyledButton = styled.div`
   justify-content: space-evenly;
 `;
 
-function Detail(type, contracrt_address, token_id) {
+function Detail(type, contract_address, token_id) {
+  
   if (type === "Rent") {
-    return Rentdetail(contracrt_address, token_id);
+    return Rentdetail(contract_address, token_id);
   } else if (type === "Kick") {
-    return KickDetail(contracrt_address, token_id);
+    return KickDetail(contract_address, token_id);
   } else if (type === "List") {
-    return ListDetail(contracrt_address, token_id)
+    return ListDetail(contract_address, token_id)
   }
 }
 
-function Rentdetail(type, contracrt_address, token_id) {
+function Rentdetail(type, contract_address, token_id) {
   const [nftdetail, setNFTdetail] = useState([]);
   const [listdetail, setListdetail] = useState([]);
   const [inputday, setInputday] = useState(0);
 
   async function searchApi() {
-    const url = `http://localhost:4000/api/${contracrt_address}/${token_id}/${type}`;
+    const url = `http://localhost:4000/api/${contract_address}/${token_id}/${type}`;
     await axios
       .get(url)
       .then(function (response) {
