@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import Kick from "./pages/Kick";
 import ItemDetail from "./pages/Itemdetail";
-import List from "./pages/List";
+import List from "./pages/ListNFT";
 import Mypage from "./pages/Mypage";
 
 function App() {

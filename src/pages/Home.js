@@ -37,7 +37,7 @@ function Home() {
       </ListButton>
       <StyledHome>
         <Menu/>
-        <Itemlist/>
+        <Itemlist type={"listed"} link={"Rent"}/>
       </StyledHome>
     </div>
   );

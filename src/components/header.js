@@ -91,17 +91,15 @@ function Header() {
         </Logo>
         <form className="serach-bar">
           <input
-            type="text"
-            id='"form-subscribe-Search'
-            placeholder="components"
+            text={"components"}
           ></input>
-          <button >
+          <button text={"Search"} >
             Search
           </button>
         </form>
       </Items>
       <Items>
-        <Link to={"/"}>Home</Link>
+        <Link to={"/"}>Explore</Link>
         <Link to={"/kick"}>Kick</Link>
         <button
            onClick={isWalletConnected ? () => "" : connectKaikas}

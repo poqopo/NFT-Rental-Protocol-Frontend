@@ -1,6 +1,7 @@
 import Caver from "caver-js";
 import rentjson from "./RentERC721.json"
 import erc721json from "./ERC721.json"
+import erc20json from "./ERC20.json"
 
 
 const caver = new Caver(window.klaytn)
@@ -89,4 +90,9 @@ export function remaintime(block) {
         만료까지 {day}일 {hour}시간 {min}분 남았습니다.
       </p>
     );
-  }
+}
+
+export async function getname(collateral_address) {
+  const contract = new caver.klay.Contract(erc20json.abi, collateral_address)
+  return (await contract.methods.name().call())
+}

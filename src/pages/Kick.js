@@ -1,6 +1,9 @@
+
+
+
 import styled from "styled-components";
 import Menu from "../components/Menu";
-import Kicklist from "../components/Kicklist";
+import Itemlist2 from "../components/Itemlist";
 
 const StyledKick = styled.div`
   border: 1px solid blue;
@@ -14,7 +17,7 @@ function Kick() {
   return (
     <StyledKick>
       <Menu />
-      <Kicklist />
+      <Itemlist2 type={"rented"} link={"Kick"} />
     </StyledKick>
   );
 }

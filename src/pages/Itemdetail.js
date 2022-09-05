@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Detail from "../components/Detail";
 
@@ -14,6 +15,8 @@ const StyledItemdetail = styled.div`
 
 
 function ItemDetail() {
+  const params = useParams()
+  
   return (
     <StyledItemdetail>
       <Detail />
