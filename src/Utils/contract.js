@@ -94,5 +94,5 @@ export function remaintime(block) {
 
 export async function getname(collateral_address) {
   const contract = new caver.klay.Contract(erc20json.abi, collateral_address)
-  return (await contract.methods.name().call())
+  return (await contract.methods.symbol().call())
 }

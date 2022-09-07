@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 const StyledMenu = styled.div`
-  border: 1px solid black;
+  border: 1px solid blue;
   border-radius: 30px;
+  margin : auto;
   text-align: center;
   width: 20%;
-  height : 100%;
-  max-width: 300px;
+  height : full;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   font-size: 20px;

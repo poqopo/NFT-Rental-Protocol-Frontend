@@ -3,7 +3,7 @@
 
 import styled from "styled-components";
 import Menu from "../components/Menu";
-import Itemlist2 from "../components/Itemlist";
+import Itemlist from "../components/Itemlist";
 
 const StyledKick = styled.div`
   border: 1px solid blue;
@@ -17,7 +17,7 @@ function Kick() {
   return (
     <StyledKick>
       <Menu />
-      <Itemlist2 type={"rented"} link={"Kick"} />
+      <Itemlist type={"rented"} link={"Kick"} />
     </StyledKick>
   );
 }

@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getname } from "../Utils/contract";
 
 const StyledList = styled.div`
-  margin: 3%;
+  margin: 5%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 300px;
   grid-gap: 5%;
-  width: 80%;
 `;
 const Item = styled.div`
   margin: auto;

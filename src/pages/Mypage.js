@@ -2,8 +2,6 @@ import styled from "styled-components";
 import Itemlist from "../components/Itemlist";
 
 const StyledMypage = styled.div`
-  display: flex;
-  flex-direction: column;
   margin: 5% 8%;
   border: 1px solid blue;
   border-radius: 30px;
@@ -32,8 +30,7 @@ function Mypage() {
         />
         <p>{currentAddress}</p>
       </Image>
-      <button>Show History</button>
-      <Itemlist type={currentAddress} link={''}/>
+      <Itemlist className={"list"} type={currentAddress} link={'Mypage'}/>
     </StyledMypage>
   );
 }
