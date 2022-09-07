@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Menu from "../components/Menu";
 import Itemlist from "../components/Itemlist";
+import Button from "../assets/Button";
 
 const StyledHome = styled.div`
   border: 1px solid blue;
@@ -26,7 +27,7 @@ const ListButton = styled.div`
     font-weight: 600;
   }
 
-  & .listbutton {
+  & .listButton {
     margin : 0 3%;
   }
 `;
@@ -39,10 +40,10 @@ function Home() {
       <ListButton>
           <div className="listtext">
             Do you want to list your NFT for addtional profit?
-            click the button to list your NFT
+            click the Button to list your NFT
           </div>
-        <Link className="listbutton" to={'/List'}>
-          <button>List your NFT!</button>
+        <Link className="listButton" to={'/List'}>
+          <Button text={"List your NFT!"}></Button>
         </Link>
       </ListButton>
       <StyledHome>

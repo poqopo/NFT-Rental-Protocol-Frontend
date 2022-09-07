@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { daytoblock, getBlock, getname, remaintime, rent } from "../Utils/contract";
+import Button from "../assets/Button";
 
 function Description({ type, itemdetail }) {
   const [inputday, setInputday] = useState(0);
@@ -47,13 +48,13 @@ function Description({ type, itemdetail }) {
             inputday * itemdetail.rent_fee_per_block} {name}
         </p>
         <input onChange={onChange} placeholder="HellO!"></input>
-        <button
+        <Button
           onClick={() =>
             rent(itemdetail.collection_address, itemdetail.token_id, inputday)
           }
         >
           {type}!
-        </button>
+        </Button>
       </div>
     );
   } else if (type === "Kick") {
@@ -72,13 +73,13 @@ function Description({ type, itemdetail }) {
           {parseInt(itemdetail.collateral_amount) +
             parseInt(itemdetail.rent_fee)}
         </p>
-        <button
+        <Button
           onClick={() =>
             rent(itemdetail.collection_address, itemdetail.token_id, inputday)
           }
+          text={type}
         >
-          {type}!
-        </button>
+        </Button>
       </div>
     );
   } else if (type === "Mypage") {
@@ -99,7 +100,7 @@ function Description({ type, itemdetail }) {
                 inputday * itemdetail.rent_fee_per_block}
             </p>
             <input onChange={onChange} placeholder="HellO!"></input>
-            <button
+            <Button
               onClick={() =>
                 rent(
                   itemdetail.collection_address,
@@ -107,10 +108,10 @@ function Description({ type, itemdetail }) {
                   inputday
                 )
               }
+              text={"Modify!"}
             >
-              Modify!
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() =>
                 rent(
                   itemdetail.collection_address,
@@ -118,9 +119,9 @@ function Description({ type, itemdetail }) {
                   inputday
                 )
               }
+              text={"CancelList!"}
             >
-              Cancellist!
-            </button>
+            </Button>
           </div>
         ) : (
           <div>
@@ -140,7 +141,7 @@ function Description({ type, itemdetail }) {
                     parseInt(itemdetail.rent_fee)}
                 </p>
                 {block - itemdetail.rent_block > itemdetail.rent_duration ? (
-                  <button>withdraw!</button>
+                  <Button text={"Withdraw!"}></Button>
                 ) : (
                   <p>
                     {remaintime(
@@ -164,7 +165,7 @@ function Description({ type, itemdetail }) {
                   {parseInt(itemdetail.collateral_amount) +
                     parseInt(itemdetail.rent_fee)}
                 </p>
-                <button>Return NFT!</button>
+                <Button text={"Return NFT"}></Button>
               </div>
             )}
           </div>
