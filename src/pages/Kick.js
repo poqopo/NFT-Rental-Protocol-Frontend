@@ -1,6 +1,3 @@
-
-
-
 import styled from "styled-components";
 import Menu from "../components/Menu";
 import Itemlist from "../components/Itemlist";

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Button from "../assets/Button";
 
 const StyledHeader = styled.div`
   border: 1px solid blue;
@@ -94,14 +93,14 @@ function Header() {
           <input
             text={"components"}
           ></input>
-          <Button text={"Search"} >
-          </Button>
+          <button text={"Search"} >
+          </button>
         </form>
       </Items>
       <Items>
         <Link to={"/"}>Explore</Link>
         <Link to={"/kick"}>Kick</Link>
-        <Button
+        <button
            onClick={isWalletConnected ? () => "" : connectKaikas}
         >
           {isWalletConnected ? (
@@ -111,7 +110,7 @@ function Header() {
           ) : (
             "Connect"
           )}
-        </Button>
+        </button>
       </Items>
     </StyledHeader>
   );

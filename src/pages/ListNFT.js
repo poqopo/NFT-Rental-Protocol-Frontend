@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { daytoblock, listNFT, approve } from "../Utils/contract";
 import styled from "styled-components";
-import Button from "../assets/Button";
 
 const StyledList = styled.div`
  margin : 5% 10%;
@@ -102,8 +101,8 @@ function List() {
           ></input>
         </Item>
       </Items>
-      <Button onClick={() => approve(collectionaddr, tokenid)} text={"approve!"}></Button>
-      <Button onClick={list} text={"List!"}></Button>
+      <button onClick={() => approve(collectionaddr, tokenid)} text={"approve!"}></button>
+      <button onClick={list} text={"List!"}></button>
     </StyledList>
   );
 }

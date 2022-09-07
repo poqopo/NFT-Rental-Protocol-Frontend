@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Menu from "../components/Menu";
 import Itemlist from "../components/Itemlist";
-import Button from "../assets/Button";
 
 const StyledHome = styled.div`
   border: 1px solid blue;
@@ -13,7 +12,7 @@ const StyledHome = styled.div`
   display : flex;
 `;
 
-const ListButton = styled.div`
+const Listbutton = styled.div`
   border: 1px solid blue;
   border-radius: 30px;
   margin: 3% auto;
@@ -27,7 +26,7 @@ const ListButton = styled.div`
     font-weight: 600;
   }
 
-  & .listButton {
+  & .listbutton {
     margin : 0 3%;
   }
 `;
@@ -37,15 +36,15 @@ const ListButton = styled.div`
 function Home() {
   return (
     <div>
-      <ListButton>
+      <Listbutton>
           <div className="listtext">
             Do you want to list your NFT for addtional profit?
-            click the Button to list your NFT
+            click the button to list your NFT
           </div>
-        <Link className="listButton" to={'/List'}>
-          <Button text={"List your NFT!"}></Button>
+        <Link className="listbutton" to={'/List'}>
+          <button text={"List your NFT!"}></button>
         </Link>
-      </ListButton>
+      </Listbutton>
       <StyledHome>
         <Menu/>
         <Itemlist type={"listed"} link={"Rent"}/>
