@@ -2,6 +2,7 @@ import { useState } from "react";
 import { daytoblock, listNFT, approve } from "../Utils/contract";
 import styled from "styled-components";
 import Button from "../components/Button,";
+import Input from "../components/Input";
 
 const StyledList = styled.div`
  margin : 5% 10%;
@@ -63,43 +64,43 @@ function List() {
         <Item class="flex flex-row place-content-between">
           <div>컬렉션 주소를 입력해주세요.</div>
           <div>
-            <input
+            <Input
               placeholder="Contract Address"
               onChange={onChangecolladdr}
-            ></input>
+            ></Input>
           </div>
         </Item>
         <Item class="flex flex-row place-content-between">
           <div>토큰 ID를 입력해주세요.</div>
-          <input placeholder="token id" onChange={onChangetokenid}></input>
+          <Input placeholder="token id" onChange={onChangetokenid}></Input>
         </Item>
         <Item class="flex flex-row place-content-between">
           <div>담보토큰 주소를 입력해주세요.</div>
-          <input
+          <Input
             placeholder="Collateral token"
             onChange={onChangecollattoken}
-          ></input>
+          ></Input>
         </Item>
         <Item class="flex flex-row place-content-between">
           <div>담보로 받을 토큰 양을 입력해주세요.</div>
-          <input
+          <Input
             placeholder="Collateral Amount"
             onChange={onChangecollatamount}
-          ></input>
+          ></Input>
         </Item>
         <Item class="flex flex-row place-content-between">
           <div>최대 담보 기간을 입력해주세요 </div>
-          <input
+          <Input
             placeholder="Maxrent Duration"
             onChange={onChangemaxrent}
-          ></input>
+          ></Input>
         </Item>
         <Item class="flex flex-row place-content-between">
           <div>일당 받을 렌탈료를 입력해주세요.</div>
-          <input
+          <Input
             placeholder="Maxrent Duration"
             onChange={onChangerentfee}
-          ></input>
+          ></Input>
         </Item>
       </Items>
       <Button onClick={() => approve(collectionaddr, tokenid)} text={"approve!"}></Button>

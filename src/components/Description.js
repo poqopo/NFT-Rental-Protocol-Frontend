@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import axios from "axios";
 import {
-  daytoblock,
   getBlock,
   getname,
   remaintime,
   rent,
 } from "../Utils/contract";
 import Button from "./Button,";
+import Input from "./Input";
 
 function Description({ type, itemdetail }) {
   const [inputday, setInputday] = useState(0);
@@ -60,7 +58,7 @@ function Description({ type, itemdetail }) {
             inputday * itemdetail.rent_fee_per_block}{" "}
           {name}
         </p>
-        <input onChange={onChange} placeholder="HellO!"></input>
+        <Input onChange={onChange} placeholder="HellO!"></Input>
         <Button
           onClick={() =>
             rent(itemdetail.collection_address, itemdetail.token_id, inputday)

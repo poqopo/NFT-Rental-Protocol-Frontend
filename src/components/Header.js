@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "./Button,";
+import Input from "./Input";
 
 const StyledHeader = styled.div`
   border: 1px solid blue;
@@ -13,7 +14,7 @@ const StyledHeader = styled.div`
 `;
 
 const Items = styled.div`
-  margin : auto;
+  margin: auto;
   font-size: 20px;
   display: flex;
   justify-content: space-around;
@@ -35,20 +36,18 @@ const Logo = styled.div`
 `;
 
 function Header() {
-
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(
     window.klaytn ? window.klaytn.selectedAddress : undefined
   );
-  
+
   useEffect(() => {
-        
     const onLoad = async () => {
-        console.log("onLoad current Address : ", currentAddress);
-        if (currentAddress) {
-            setIsWalletConnected(true);
-            setCurrentAddress(currentAddress);
-        }
+      console.log("onLoad current Address : ", currentAddress);
+      if (currentAddress) {
+        setIsWalletConnected(true);
+        setCurrentAddress(currentAddress);
+      }
     };
     // load eventlistner 추가해서
     // 문서내 모든 컨텐츠가 load되면
@@ -58,22 +57,20 @@ function Header() {
     // accountChange EventListner
     //   -> 지갑주소 undefined 됐을때 대비 갱신
     if (window.klaytn) {
-        window.klaytn.on("accountsChanged", async function (accounts) {
-            
-            console.log(
-                "account change listned in header : ",
-                currentAddress,
-                " -> ",
-                accounts[0]
-            );
+      window.klaytn.on("accountsChanged", async function (accounts) {
+        console.log(
+          "account change listned in header : ",
+          currentAddress,
+          " -> ",
+          accounts[0]
+        );
 
-            await setCurrentAddress(accounts[0]);
-            await setIsWalletConnected(true);
-        });
+        await setCurrentAddress(accounts[0]);
+        await setIsWalletConnected(true);
+      });
     }
     return () => window.removeEventListener("load", onLoad);
-}, []);
-
+  }, []);
 
   async function connectKaikas() {
     const response = await window.klaytn.enable();
@@ -83,7 +80,6 @@ function Header() {
     return window.klaytn.selectedAddress;
   }
 
-
   return (
     <StyledHeader>
       <Items>
@@ -91,27 +87,26 @@ function Header() {
           <img src="/logo512.png" width="28px" alt="Workflow" />
         </Logo>
         <form className="serach-bar">
-          <input
-            text={"components"}
-          ></input>
-          <Button text={"Search!"}>
-          </Button>
+          <Input placeholder={"components"} />
+          <Button text={"Search!"}></Button>
         </form>
       </Items>
       <Items>
         <Link to={"/"}>Explore</Link>
         <Link to={"/kick"}>Kick</Link>
-        <button
-           onClick={isWalletConnected ? () => "" : connectKaikas}
-        >
-          {isWalletConnected ? (
-            <Link to={`/Mypage/${currentAddress}`}>
-              {currentAddress.slice(0, 10)}
-            </Link>
-          ) : (
-            "Connect"
-          )}
-        </button>
+
+        <Button
+          onClick={isWalletConnected ? () => "" : connectKaikas}
+          text={
+            isWalletConnected ? (
+              <Link to={`/Mypage/${currentAddress}`}>
+                {currentAddress.slice(0, 10)}
+              </Link>
+            ) : (
+              "Connect"
+            )
+          }
+        ></Button>
       </Items>
     </StyledHeader>
   );
