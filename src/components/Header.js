@@ -16,8 +16,9 @@ const StyledHeader = styled.div`
 const Items = styled.div`
   margin: auto;
   font-size: 20px;
+  font-weight: 600;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   width: 50%;
   height: 60%;
 
@@ -25,6 +26,15 @@ const Items = styled.div`
     margin: auto;
     display: flex;
     width: 40%;
+  }
+
+  & .logo {
+    position: static;
+    top: 0px;
+    left: 0px;
+    bottom: 200px;
+    width: 200px;
+    height: 100px;
   }
 `;
 
@@ -84,7 +94,7 @@ function Header() {
     <StyledHeader>
       <Items>
         <Logo>
-          <img src="/logo512.png" width="28px" alt="Workflow" />
+          <img src="/logo192.png" width="28px" alt="Workflow" />
         </Logo>
         <form className="serach-bar">
           <Input placeholder={"components"} />

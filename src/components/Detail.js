@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import Description from "./Description";
+import Input from "./Input";
 
 const StyledDetail = styled.div`
   display: flex;

@@ -30,7 +30,7 @@ function Mypage() {
         />
         <p>{currentAddress}</p>
       </Image>
-      <Itemlist className={"list"} type={currentAddress} link={'Mypage'}/>
+      <Itemlist type={currentAddress} link={'Mypage'}/>
     </StyledMypage>
   );
 }
