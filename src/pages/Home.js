@@ -11,6 +11,7 @@ const StyledHome = styled.div`
   height : full;
   margin-top: 30px;
   display : flex;
+  justify-content: space-between;
 `;
 
 const Listbutton = styled.div`
