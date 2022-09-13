@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import {
-  getBlock,
-  getname,
-  remaintime,
-  rent,
-} from "../Utils/contract";
+import { getBlock, getname, modifyNFT, remaintime, rent } from "../Utils/contract";
 import Button from "./Button,";
 import Input from "./Input";
+import Dropdown from "./Dropdown";
+
 
 function Description({ type, itemdetail }) {
   const [inputday, setInputday] = useState(0);
+  const [inputval, setInputval] = useState(0);
+  const [index, setIndex] = useState(0);
   const [block, setBlock] = useState(0);
   const [name, setName] = useState("");
   const onChange = (e) => setInputday(e.target.value);
+  const onChangeval = (e) => setInputval(e.target.value)
 
   async function fetchblock() {
     try {
@@ -64,8 +64,7 @@ function Description({ type, itemdetail }) {
             rent(itemdetail.collection_address, itemdetail.token_id, inputday)
           }
           text={type}
-        >
-        </Button>
+        ></Button>
       </div>
     );
   } else if (type === "Kick") {
@@ -95,9 +94,7 @@ function Description({ type, itemdetail }) {
             rent(itemdetail.collection_address, itemdetail.token_id, inputday)
           }
           text={type}
-        >
-          
-        </Button>
+        ></Button>
       </div>
     );
   } else if (type === "Mypage") {
@@ -123,17 +120,18 @@ function Description({ type, itemdetail }) {
               {parseInt(itemdetail.collateral_amount) +
                 inputday * itemdetail.rent_fee_per_block}
             </p>
+            <Dropdown itemlist={['max rent duration', 'rent fee per block', 'collateral_amount']} />
             <input onChange={onChange} placeholder="HellO!"></input>
             <Button
               onClick={() =>
-                rent(
+                modifyNFT(
                   itemdetail.collection_address,
                   itemdetail.token_id,
-                  inputday
+                  index,
+                  inputval
                 )
               }
               text={"Modify"}
-
             ></Button>
             <Button
               onClick={() =>
@@ -200,7 +198,7 @@ function Description({ type, itemdetail }) {
                   {parseInt(itemdetail.collateral_amount) +
                     parseInt(itemdetail.rent_fee)}
                 </p>
-                <Button text={"Return NFT!"}></Button>
+                <Button text={"Return NFT!"} />
               </div>
             )}
           </div>

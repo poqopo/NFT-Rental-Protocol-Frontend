@@ -50,11 +50,9 @@ export async function kickNFT(collection, tokenid){
 }
 
 
-export async function test() {
-    const nftaddr = "0x080C99eab039139279Fd57fC2057799c21783B91"
-    const tokenid = 2
+export async function modifyNFT(index, value, collection, token_id) {
     try {
-        await rentcontract.methods.kick(nftaddr, tokenid)
+        await rentcontract.methods.modifylist(collection, token_id, [index], [value])
         .send({
           from: window.klaytn.selectedAddress,
           gas: 3000000
@@ -95,4 +93,10 @@ export function remaintime(block) {
 export async function getname(collateral_address) {
   const contract = new caver.klay.Contract(erc20json.abi, collateral_address)
   return (await contract.methods.symbol().call())
+}
+
+export function getImage(url) {
+  if (url.startsWith("ipfs://")) {
+    return "https://ipfs.io/ipfs/" + url.split("ipfs://")[1]
+ } else return url
 }

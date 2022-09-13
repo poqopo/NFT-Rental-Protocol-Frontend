@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { getImage } from "../Utils/contract";
 
 const StyledList = styled.div`
   margin: 5%;
@@ -37,7 +38,7 @@ function Itemlist({ type, link }) {
         console.log("성공");
       })
       .catch(function (error) {
-        console.log("실패");
+        console.log(error);
       });
   }
 

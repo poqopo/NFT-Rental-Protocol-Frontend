@@ -3,20 +3,20 @@ import styled from "styled-components";
 import axios from "axios";
 import Description from "./Description";
 import Input from "./Input";
+import { getImage } from "../Utils/contract";
 
 const StyledDetail = styled.div`
   display: flex;
 `;
 
 const Image = styled.div`
-  max-width: 350px;
-  max-height: 350px;
+  width: 350px;
   display: flex;
   flex-direction: column;
 `;
 
 const StyledInfo = styled.div`
-  padding : 0 10%;
+  padding: 0 10%;
   font-size: 18px;
   font-weight: 800;
 `;
@@ -41,7 +41,7 @@ function Detail({ type, contract_address, token_id }) {
       .catch(function (error) {
         console.log("실패");
       });
-    }
+  }
 
   useEffect(() => {
     searchApi();
@@ -54,7 +54,7 @@ function Detail({ type, contract_address, token_id }) {
           <img src={`${itemdetail.nft_image}`} alt="Loading..."></img>
         </Image>
         <StyledInfo>
-          <Description type={type} itemdetail={itemdetail}/>
+          <Description type={type} itemdetail={itemdetail} />
         </StyledInfo>
       </StyledDetail>
       <p>Description : {itemdetail.description}</p>
