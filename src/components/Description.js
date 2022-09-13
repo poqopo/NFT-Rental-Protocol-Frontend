@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { daytoblock, getBlock, getname, remaintime, rent } from "../Utils/contract";
+import {
+  daytoblock,
+  getBlock,
+  getname,
+  remaintime,
+  rent,
+} from "../Utils/contract";
+import Button from "./Button,";
 
 function Description({ type, itemdetail }) {
   const [inputday, setInputday] = useState(0);
   const [block, setBlock] = useState(0);
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
   const onChange = (e) => setInputday(e.target.value);
 
   async function fetchblock() {
@@ -19,7 +26,7 @@ function Description({ type, itemdetail }) {
 
   async function fetchname() {
     try {
-      setName(await getname(itemdetail.collateral_token))
+      setName(await getname(itemdetail.collateral_token));
     } catch (e) {
       console.log(e);
     }
@@ -38,22 +45,29 @@ function Description({ type, itemdetail }) {
           이름 : {itemdetail.nft_name} #{itemdetail.token_id}
         </p>
         <p> 소유자 : {itemdetail.holder_account}</p>
-        <p> 담보 : {itemdetail.collateral_amount} {name}</p>
-        <p> 대여료(일당) : {itemdetail.rent_fee_per_block} {name}</p>
+        <p>
+          {" "}
+          담보 : {itemdetail.collateral_amount} {name}
+        </p>
+        <p>
+          {" "}
+          대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+        </p>
         <p> 최대 대여 일수 : {itemdetail.max_rent_duration} days</p>
         <p>
           총 대여료 :{" "}
           {parseInt(itemdetail.collateral_amount) +
-            inputday * itemdetail.rent_fee_per_block} {name}
+            inputday * itemdetail.rent_fee_per_block}{" "}
+          {name}
         </p>
         <input onChange={onChange} placeholder="HellO!"></input>
-        <button
+        <Button
           onClick={() =>
             rent(itemdetail.collection_address, itemdetail.token_id, inputday)
           }
+          text={type}
         >
-          {type}!
-        </button>
+        </Button>
       </div>
     );
   } else if (type === "Kick") {
@@ -63,8 +77,14 @@ function Description({ type, itemdetail }) {
           이름 : {itemdetail.nft_name} #{itemdetail.token_id}
         </p>
         <p> 대여자 : {itemdetail.renter_accounts}</p>
-        <p> 담보 : {itemdetail.collateral_amount} {name}</p>
-        <p> 대여료(일당) : {itemdetail.rent_fee_per_block} {name}</p>
+        <p>
+          {" "}
+          담보 : {itemdetail.collateral_amount} {name}
+        </p>
+        <p>
+          {" "}
+          대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+        </p>
         <p> 대여 일수 : {itemdetail.max_rent_duration} days</p>
         <p> 대여 일자 : {itemdetail.rent_block} days</p>
         <p>
@@ -72,13 +92,14 @@ function Description({ type, itemdetail }) {
           {parseInt(itemdetail.collateral_amount) +
             parseInt(itemdetail.rent_fee)}
         </p>
-        <button
+        <Button
           onClick={() =>
             rent(itemdetail.collection_address, itemdetail.token_id, inputday)
           }
           text={type}
         >
-        </button>
+          
+        </Button>
       </div>
     );
   } else if (type === "Mypage") {
@@ -90,8 +111,14 @@ function Description({ type, itemdetail }) {
               이름 : {itemdetail.nft_name} #{itemdetail.token_id}
             </p>
             <p> 소유자 : {itemdetail.holder_account}</p>
-            <p> 담보 : {itemdetail.collateral_amount} {name}</p>
-            <p> 대여료(일당) : {itemdetail.rent_fee_per_block} {name}</p>
+            <p>
+              {" "}
+              담보 : {itemdetail.collateral_amount} {name}
+            </p>
+            <p>
+              {" "}
+              대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+            </p>
             <p> 최대 대여 일수 : {itemdetail.max_rent_duration} days</p>
             <p>
               총 대여료 :{" "}
@@ -99,7 +126,7 @@ function Description({ type, itemdetail }) {
                 inputday * itemdetail.rent_fee_per_block}
             </p>
             <input onChange={onChange} placeholder="HellO!"></input>
-            <button
+            <Button
               onClick={() =>
                 rent(
                   itemdetail.collection_address,
@@ -107,10 +134,10 @@ function Description({ type, itemdetail }) {
                   inputday
                 )
               }
-              text={"Modify!"}
-            >
-            </button>
-            <button
+              text={"Modify"}
+
+            ></Button>
+            <Button
               onClick={() =>
                 rent(
                   itemdetail.collection_address,
@@ -118,9 +145,8 @@ function Description({ type, itemdetail }) {
                   inputday
                 )
               }
-              text={"CancelList!"}
-            >
-            </button>
+              text={"CancelList"}
+            ></Button>
           </div>
         ) : (
           <div>
@@ -130,8 +156,14 @@ function Description({ type, itemdetail }) {
                   이름 : {itemdetail.nft_name} #{itemdetail.token_id}
                 </p>
                 <p> 대여자 : {itemdetail.renter_accounts}</p>
-                <p> 담보 : {itemdetail.collateral_amount} {name}</p>
-                <p> 대여료(일당) : {itemdetail.rent_fee_per_block} {name}</p>
+                <p>
+                  {" "}
+                  담보 : {itemdetail.collateral_amount} {name}
+                </p>
+                <p>
+                  {" "}
+                  대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+                </p>
                 <p> 대여 일수 : {itemdetail.max_rent_duration} days</p>
                 <p> 대여 일자 : {itemdetail.rent_block}</p>
                 <p>
@@ -140,7 +172,7 @@ function Description({ type, itemdetail }) {
                     parseInt(itemdetail.rent_fee)}
                 </p>
                 {block - itemdetail.rent_block > itemdetail.rent_duration ? (
-                  <button text={"Withdraw!"}></button>
+                  <Button text={"Withdraw!"}></Button>
                 ) : (
                   <p>
                     {remaintime(
@@ -155,8 +187,14 @@ function Description({ type, itemdetail }) {
                   이름 : {itemdetail.nft_name} #{itemdetail.token_id}
                 </p>
                 <p> 대여자 : {itemdetail.renter_accounts}</p>
-                <p> 담보 : {itemdetail.collateral_amount} {name}</p>
-                <p> 대여료(일당) : {itemdetail.rent_fee_per_block} {name}</p>
+                <p>
+                  {" "}
+                  담보 : {itemdetail.collateral_amount} {name}
+                </p>
+                <p>
+                  {" "}
+                  대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+                </p>
                 <p> 대여 일수 : {itemdetail.max_rent_duration} days</p>
                 <p> 대여 일자 : {itemdetail.rent_block} days</p>
                 <p>
@@ -164,7 +202,7 @@ function Description({ type, itemdetail }) {
                   {parseInt(itemdetail.collateral_amount) +
                     parseInt(itemdetail.rent_fee)}
                 </p>
-                <button text={"Return NFT"}></button>
+                <Button text={"Return NFT!"}></Button>
               </div>
             )}
           </div>

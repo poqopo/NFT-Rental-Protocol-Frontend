@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Button from "./Button,";
 
 const StyledHeader = styled.div`
   border: 1px solid blue;
@@ -93,8 +94,8 @@ function Header() {
           <input
             text={"components"}
           ></input>
-          <button text={"Search"} >
-          </button>
+          <Button text={"Search!"}>
+          </Button>
         </form>
       </Items>
       <Items>

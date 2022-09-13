@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Menu from "../components/Menu";
 import Itemlist from "../components/Itemlist";
+import Button from "../components/Button,";
 
 const StyledHome = styled.div`
   border: 1px solid blue;
@@ -42,7 +43,7 @@ function Home() {
             click the button to list your NFT
           </div>
         <Link className="listbutton" to={'/List'}>
-          <button text={"List your NFT!"}></button>
+          <Button text={"List your NFT!"}></Button>
         </Link>
       </Listbutton>
       <StyledHome>
