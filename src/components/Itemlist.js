@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getImage } from "../Utils/contract";
 
 const StyledList = styled.div`
   margin: 5%;
@@ -27,10 +26,10 @@ const Item = styled.div`
 
 function Itemlist({ type, link }) {
   const [itemlist, setItemlist] = useState([]);
-
   // 통신 메서드
   async function searchApi() {
     const url = `http://localhost:4000/api/NFT/${type}`;
+    console.log(url)
     await axios
       .get(url)
       .then(function (response) {
@@ -54,7 +53,7 @@ function Itemlist({ type, link }) {
             <h3>
               이름 : {info.nft_name} #{info.token_id}
             </h3>
-            <Link to={`/${info.collection_address}/${info.token_id}/${link}`}>
+            <Link to={`/${info.collection_address}/${info.token_id}/${link ? link : info.link}`}>
               <img className="image" src={info.nft_image} alt="loading..." />
             </Link>
           </Item>

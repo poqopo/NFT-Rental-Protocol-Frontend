@@ -1,18 +1,29 @@
 import { useEffect, useState } from "react";
-import { getBlock, getname, modifyNFT, remaintime, rent } from "../Utils/contract";
+import {
+  getBlock,
+  getname,
+  modifyNFT,
+  remaintime,
+  rent,
+} from "../Utils/contract";
 import Button from "./Button,";
 import Input from "./Input";
-import Dropdown from "./Dropdown";
-
+import SelectBox from "./SelectBox";
 
 function Description({ type, itemdetail }) {
   const [inputday, setInputday] = useState(0);
   const [inputval, setInputval] = useState(0);
-  const [index, setIndex] = useState(0);
   const [block, setBlock] = useState(0);
   const [name, setName] = useState("");
+  const [collat, setCollat] = useState(0);
   const onChange = (e) => setInputday(e.target.value);
-  const onChangeval = (e) => setInputval(e.target.value)
+  const collatchange = (e) => {
+    console.log(e.target.value);
+    setCollat(e.target.value);
+  };
+  const onChangeval = (e) => setInputval(e.target.value);
+  
+  console.log(collat);
 
   async function fetchblock() {
     try {
@@ -34,6 +45,12 @@ function Description({ type, itemdetail }) {
     fetchblock();
     fetchname();
   }, [fetchblock, fetchname]);
+
+  const OPTIONS = [
+    { value: "0", name: "max rent duration" },
+    { value: "1", name: "collateral amount" },
+    { value: "2", name: "rent fee per block" },
+  ];
 
   const currentAddress = window.klaytn.selectedAddress;
   if (type === "Rent") {
@@ -120,14 +137,21 @@ function Description({ type, itemdetail }) {
               {parseInt(itemdetail.collateral_amount) +
                 inputday * itemdetail.rent_fee_per_block}
             </p>
-            <Dropdown itemlist={['max rent duration', 'rent fee per block', 'collateral_amount']} />
-            <input onChange={onChange} placeholder="HellO!"></input>
+            <SelectBox
+              options={OPTIONS}
+              defaultValue="0"
+              handlechange={collatchange}
+            ></SelectBox>
+            <Input
+              onChange={onChangeval}
+              placeholder="값을 넣어주세요!"
+            ></Input>
             <Button
               onClick={() =>
                 modifyNFT(
                   itemdetail.collection_address,
                   itemdetail.token_id,
-                  index,
+                  collat,
                   inputval
                 )
               }

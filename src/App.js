@@ -5,6 +5,7 @@ import Kick from "./pages/Kick";
 import ItemDetail from "./pages/Itemdetail";
 import List from "./pages/ListNFT";
 import Mypage from "./pages/Mypage";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/:contractaddress/:tokenid/:detail" element={<ItemDetail />}/>
         <Route path="/List" element={<List />} />
         <Route path="/Mypage/:userAddress" element={<Mypage />} />
+        <Route path="/search/:collectionname" element={<Search/>}/>
       </Routes>
     </Router>
   );

@@ -50,6 +50,9 @@ function Header() {
   const [currentAddress, setCurrentAddress] = useState(
     window.klaytn ? window.klaytn.selectedAddress : undefined
   );
+  const [serachname, setSearchname] = useState('');
+
+  const onChange = (e) => setSearchname(e.target.value)
 
   useEffect(() => {
     const onLoad = async () => {
@@ -96,10 +99,10 @@ function Header() {
         <Logo>
           <img src="/logo192.png" width="28px" alt="Workflow" />
         </Logo>
-        <form className="serach-bar">
-          <Input placeholder={"components"} />
-          <Button text={"Search!"}></Button>
-        </form>
+        <div className="serach-bar">
+          <Input placeholder={"components"} onChange={onChange} />
+          <Button text={<Link to={`/search/${serachname}`}>Search!</Link>}></Button>
+        </div>
       </Items>
       <Items>
         <Link to={"/"}>Explore</Link>

@@ -3,6 +3,7 @@ import { daytoblock, listNFT, approve } from "../Utils/contract";
 import styled from "styled-components";
 import Button from "../components/Button,";
 import Input from "../components/Input";
+import SelectBox from "../components/SelectBox";
 
 const StyledList = styled.div`
  margin : 5% 10%;
@@ -45,6 +46,12 @@ function List() {
   const onChangemaxrent = (e) => setMaxRent(e.target.value);
   const onChangerentfee = (e) => setRentfee(e.target.value);
 
+  const OPTIONS = [
+    { value: "0xDDFd4B9d00dC3e39bc759243Bb3906540ee6fD3D", name: "KUSDT" },
+    { value: "jefgbjdfb", name: "KUSDC" },
+    { value: "savscs", name: "WKLAY" },
+  ];
+
   const list = async () => {
     const listblock = await daytoblock(maxrent);
     await listNFT(
@@ -56,6 +63,8 @@ function List() {
       parseInt(rentfee / listblock)
     );
   };
+
+
 
   return (
     <StyledList>
@@ -75,11 +84,12 @@ function List() {
           <Input placeholder="token id" onChange={onChangetokenid}></Input>
         </Item>
         <Item class="flex flex-row place-content-between">
-          <div>담보토큰 주소를 입력해주세요.</div>
-          <Input
-            placeholder="Collateral token"
-            onChange={onChangecollattoken}
-          ></Input>
+          <div>담보토큰을 선택해주세요.</div>
+          <SelectBox
+              options={OPTIONS}
+              defaultValue="0"
+              handlechange={onChangecollattoken}
+            ></SelectBox>
         </Item>
         <Item class="flex flex-row place-content-between">
           <div>담보로 받을 토큰 양을 입력해주세요.</div>

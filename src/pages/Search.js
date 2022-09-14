@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Menu from "../components/Menu";
 import Itemlist from "../components/Itemlist";
+import { useParams } from "react-router-dom";
 
 const StyledSeach = styled.div`
   border: 1px solid blue;
@@ -10,12 +11,12 @@ const StyledSeach = styled.div`
 `;
 
 function Search() {
-    
+  const params = useParams()
 
   return (
     <StyledSeach>
       <Menu />
-      <Itemlist type={"search/"} link={"Kick"} />
+      <Itemlist type={`search/${params.collectionname}`} />
     </StyledSeach>
   );
 }
