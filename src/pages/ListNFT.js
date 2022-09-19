@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { daytoblock, listNFT, approve } from "../Utils/contract";
+import { daytoblock, listNFT, approve, getDecimal } from "../Utils/contract";
 import styled from "styled-components";
 import Button from "../components/Button,";
 import Input from "../components/Input";
 import SelectBox from "../components/SelectBox";
+import BigNumber from "bignumber.js";
 
 const StyledList = styled.div`
  margin : 5% 10%;
@@ -41,26 +42,27 @@ function List() {
 
   const onChangecolladdr = (e) => setCollectionAddr(e.target.value);
   const onChangetokenid = (e) => setTokenId(e.target.value);
-  const onChangecollattoken = (e) => setCollattoken(e.target.value);
+  const onChangecollattoken = (e) => {setCollattoken(e.target.value)};
   const onChangecollatamount = (e) => setCollatamount(e.target.value);
   const onChangemaxrent = (e) => setMaxRent(e.target.value);
   const onChangerentfee = (e) => setRentfee(e.target.value);
 
   const OPTIONS = [
-    { value: "0xDDFd4B9d00dC3e39bc759243Bb3906540ee6fD3D", name: "KUSDT" },
-    { value: "jefgbjdfb", name: "KUSDC" },
-    { value: "savscs", name: "WKLAY" },
+    { value: "0xbde2ad922cd2e2c736050a2f21408fd501fc2492", name: "MTK", decimal : 1e18 },
+    { value: "", name: "Not Available now" },
   ];
 
   const list = async () => {
-    const listblock = await daytoblock(maxrent);
+    const maxrentblock = await daytoblock(maxrent);
     await listNFT(
       collectionaddr,
       collattoken,
       tokenid,
-      listblock,
+      maxrentblock,
       collatamount,
-      parseInt(rentfee / listblock)
+      rentfee
+      // BigNumber(collatamount * OPTIONS[0].decimal),
+      // BigNumber(parseInt(rentfee * OPTIONS[0].decimal / 60*60*24 ))
     );
   };
 
@@ -87,7 +89,7 @@ function List() {
           <div>담보토큰을 선택해주세요.</div>
           <SelectBox
               options={OPTIONS}
-              defaultValue="0"
+              defaultValue="1"
               handlechange={onChangecollattoken}
             ></SelectBox>
         </Item>

@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import Itemlist from "../components/Itemlist";
 
-const StyledMypage = styled.div`
-  margin: 5% 8%;
+const StyledKick = styled.div`
   border: 1px solid blue;
   border-radius: 30px;
+  margin-top: 30px;
+  display: flex;
 `;
+
 const Image = styled.div`
   margin: 5% auto;
   text-align: center;
@@ -21,7 +23,7 @@ function Mypage() {
   const currentAddress = window.klaytn.selectedAddress;
 
   return (
-    <StyledMypage>
+    <div>
       <Image>
         <img
           className="image"
@@ -30,8 +32,10 @@ function Mypage() {
         />
         <p>{currentAddress}</p>
       </Image>
-      <Itemlist type={currentAddress} link={'Mypage'}/>
-    </StyledMypage>
+      <StyledKick>
+        <Itemlist type={currentAddress} link={"Mypage"} />
+      </StyledKick>
+    </div>
   );
 }
 

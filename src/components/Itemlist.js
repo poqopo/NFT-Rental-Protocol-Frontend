@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const StyledList = styled.div`
+  width : 100%;
   margin: 5%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);

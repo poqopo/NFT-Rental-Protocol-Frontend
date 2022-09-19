@@ -95,3 +95,8 @@ export async function getname(collateral_address) {
   const contract = new caver.klay.Contract(erc20json.abi, collateral_address)
   return (await contract.methods.symbol().call())
 }
+
+export async function getDecimal(collateral_address) {
+  const contract = new caver.klay.Contract(erc20json.abi, collateral_address)
+  return (await contract.methods.decimal().call())
+}
