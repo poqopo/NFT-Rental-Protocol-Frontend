@@ -2,10 +2,11 @@ import Caver from "caver-js";
 import rentjson from "./RentERC721.json"
 import erc721json from "./ERC721.json"
 import erc20json from "./ERC20.json"
-
+import dotenv from "dotenv";
+dotenv.config();
 
 const caver = new Caver(window.klaytn)
-const rentcontract = new caver.klay.Contract(rentjson.abi, "0x208291a2279882Cb6aC238977735eddd5d6e283C")
+const rentcontract = new caver.klay.Contract(rentjson.abi, process.env.REACT_APP_contract_address)
 
 
 export async function approve(collection, tokenid){
@@ -93,10 +94,4 @@ export function remaintime(block) {
 export async function getname(collateral_address) {
   const contract = new caver.klay.Contract(erc20json.abi, collateral_address)
   return (await contract.methods.symbol().call())
-}
-
-export function getImage(url) {
-  if (url.startsWith("ipfs://")) {
-    return "https://ipfs.io/ipfs/" + url.split("ipfs://")[1]
- } else return url
 }

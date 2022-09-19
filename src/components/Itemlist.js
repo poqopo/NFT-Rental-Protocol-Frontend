@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import dotenv from "dotenv";
+dotenv.config();
 
 const StyledList = styled.div`
   margin: 5%;
@@ -28,7 +30,7 @@ function Itemlist({ type, link }) {
   const [itemlist, setItemlist] = useState([]);
   // 통신 메서드
   async function searchApi() {
-    const url = `http://localhost:4000/api/NFT/${type}`;
+    const url = process.env.REACT_APP_API_URL + `/api/NFT/${type}`;
     console.log(url)
     await axios
       .get(url)

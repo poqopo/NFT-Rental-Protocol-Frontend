@@ -4,6 +4,8 @@ import axios from "axios";
 import Description from "./Description";
 import Input from "./Input";
 import { getImage } from "../Utils/contract";
+import dotenv from "dotenv";
+dotenv.config();
 
 const StyledDetail = styled.div`
   display: flex;
@@ -31,7 +33,7 @@ function Detail({ type, contract_address, token_id }) {
   const [itemdetail, setItemdetail] = useState([]);
 
   async function searchApi() {
-    const url = `http://localhost:4000/api/${contract_address}/${token_id}/${type}`;
+    const url = process.env.REACT_APP_API_URL + `/api/${contract_address}/${token_id}/${type}`;
     await axios
       .get(url)
       .then(function (response) {
