@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   getBlock,
+  getDecimal,
   getname,
   modifyNFT,
   remaintime,
@@ -16,11 +17,9 @@ function Description({ type, itemdetail }) {
   const [block, setBlock] = useState(0);
   const [name, setName] = useState("");
   const [collat, setCollat] = useState(0);
+  const [decimal, setDecimal] = useState(1);
   const onChange = (e) => setInputday(e.target.value);
-  const collatchange = (e) => {
-    console.log(e.target.value);
-    setCollat(e.target.value);
-  };
+  const collatchange = (e) => setCollat(e.target.value);
   const onChangeval = (e) => setInputval(e.target.value);
   
   console.log(collat);
@@ -41,10 +40,20 @@ function Description({ type, itemdetail }) {
     }
   }
 
+  async function fetchdecimal() {
+    try {
+      setDecimal(await getDecimal(itemdetail.collateral_token));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
-    fetchblock();
-    fetchname();
-  }, [fetchblock, fetchname]);
+    fetchblock()
+    fetchdecimal()
+    fetchname()
+    
+  }, [fetchblock, fetchdecimal, fetchname]);
 
   const OPTIONS = [
     { value: "0", name: "max rent duration" },
@@ -62,23 +71,24 @@ function Description({ type, itemdetail }) {
         <p> 소유자 : {itemdetail.holder_account}</p>
         <p>
           {" "}
-          담보 : {itemdetail.collateral_amount} {name}
+          담보 : {itemdetail.collateral_amount / 10 ** decimal} {name}
         </p>
         <p>
           {" "}
-          대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+          대여료(일당) : {Math.round(itemdetail.rent_fee_per_block *60*60*24 / 10 ** decimal)} {name}
         </p>
-        <p> 최대 대여 일수 : {itemdetail.max_rent_duration} days</p>
+        <p> 최대 대여 일수 : {itemdetail.max_rent_duration /60/60/24} days</p>
         <p>
           총 대여료 :{" "}
-          {parseInt(itemdetail.collateral_amount) +
-            inputday * itemdetail.rent_fee_per_block}{" "}
+          {Math.round((parseInt(itemdetail.collateral_amount) +
+            inputday *60*60*24 * parseInt(itemdetail.rent_fee_per_block)) / 10 ** decimal)}{" "}
           {name}
         </p>
-        <Input onChange={onChange} placeholder="HellO!"></Input>
+
+   <Input onChange={onChange} placeholder="days"></Input>
         <Button
           onClick={() =>
-            rent(itemdetail.collection_address, itemdetail.token_id, inputday)
+            rent(itemdetail.collection_address, itemdetail.token_id, inputday*60*60*24)
           }
           text={type}
         ></Button>

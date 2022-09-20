@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { daytoblock, listNFT, approve, getDecimal } from "../Utils/contract";
+import { daytoblock, listNFT, approve, getDecimal, blocktoday } from "../Utils/contract";
 import styled from "styled-components";
 import Button from "../components/Button,";
 import Input from "../components/Input";
@@ -48,8 +48,8 @@ function List() {
   const onChangerentfee = (e) => setRentfee(e.target.value);
 
   const OPTIONS = [
+    { value: "", name: "Please select collateral" },
     { value: "0xbde2ad922cd2e2c736050a2f21408fd501fc2492", name: "MTK", decimal : 1e18 },
-    { value: "", name: "Not Available now" },
   ];
 
   const list = async () => {
@@ -59,10 +59,8 @@ function List() {
       collattoken,
       tokenid,
       maxrentblock,
-      collatamount,
-      rentfee
-      // BigNumber(collatamount * OPTIONS[0].decimal),
-      // BigNumber(parseInt(rentfee * OPTIONS[0].decimal / 60*60*24 ))
+      BigNumber(collatamount * OPTIONS[1].decimal),
+      BigNumber(parseInt(blocktoday(rentfee * OPTIONS[1].decimal)))
     );
   };
 

@@ -7,7 +7,7 @@ dotenv.config();
 
 const caver = new Caver(window.klaytn)
 const rentcontract = new caver.klay.Contract(rentjson.abi, process.env.REACT_APP_contract_address)
-
+export const MAX_UNIT = (2**256 - 1)/10
 
 export async function approve(collection, tokenid){
     try {
@@ -18,6 +18,16 @@ export async function approve(collection, tokenid){
           gas: 3000000
         })
     } catch(e) {console.log(e)} 
+}
+export async function approvecollat(collection){
+  try {
+      const collection_address = new caver.klay.Contract(erc20json.abi, collection)
+      await collection_address.methods.approve(rentcontract._address, MAX_UNIT)
+      .send({
+        from: window.klaytn.selectedAddress,
+        gas: 3000000
+      })
+  } catch(e) {console.log(e)} 
 }
 
 export async function rent(collection, tokenid, rentduration){
@@ -98,5 +108,5 @@ export async function getname(collateral_address) {
 
 export async function getDecimal(collateral_address) {
   const contract = new caver.klay.Contract(erc20json.abi, collateral_address)
-  return (await contract.methods.decimal().call())
+  return (await contract.methods.decimals().call())
 }
