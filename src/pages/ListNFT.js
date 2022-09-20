@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { daytoblock, listNFT, approve, getDecimal, blocktoday } from "../Utils/contract";
+import { daytoblock, listNFT, approve, blocktoday } from "../Utils/contract";
 import styled from "styled-components";
 import Button from "../components/Button,";
 import Input from "../components/Input";
@@ -54,13 +54,14 @@ function List() {
 
   const list = async () => {
     const maxrentblock = await daytoblock(maxrent);
+    console.log(BigNumber(rentfee * OPTIONS[1].decimal /60/60/24))
     await listNFT(
       collectionaddr,
       collattoken,
       tokenid,
       maxrentblock,
       BigNumber(collatamount * OPTIONS[1].decimal),
-      BigNumber(parseInt(blocktoday(rentfee * OPTIONS[1].decimal)))
+      BigNumber(Math.round(rentfee * OPTIONS[1].decimal /60/60/24))
     );
   };
 
