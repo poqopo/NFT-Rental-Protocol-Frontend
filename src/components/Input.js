@@ -3,7 +3,7 @@ import styles from "../assets/Input.module.css";
 
 function Input({ placeholder, onChange }) {
   return (
-    <input               type="number" className={styles.Input} placeholder={placeholder} onChange={onChange}/>
+    <input className={styles.Input} placeholder={placeholder} onChange={onChange}/>
   );
 }
 export default Input;
