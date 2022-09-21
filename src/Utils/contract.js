@@ -128,10 +128,10 @@ export async function Cancel(collection, tokenid) {
   }
 }
 
-export async function modifyNFT(index, value, collection, token_id) {
+export async function modifyNFT(collection, token_id, index, value) {
   try {
     await rentcontract.methods
-      .modifylist(collection, token_id, [index], [value])
+      .modifylist(collection, token_id, [index], [BigNumber(value)])
       .send({
         from: window.klaytn.selectedAddress,
         gas: 3000000,
@@ -179,6 +179,10 @@ export async function getname(collateral_address) {
 export async function getDecimal(collateral_address) {
   const contract = new caver.klay.Contract(erc20json.abi, collateral_address);
   return await contract.methods.decimals().call();
+}
+
+export async function getDelay() {
+  return await rentcontract.methods.execution_delay().call();
 }
 
 export async function getAllowance(collateral_address) {

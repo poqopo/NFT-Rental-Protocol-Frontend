@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import { useEffect, useState } from "react";
 import {
   approve,
@@ -6,7 +7,9 @@ import {
   getAllowance,
   getBlock,
   getDecimal,
+  getDelay,
   getname,
+  kickNFT,
   modifyNFT,
   remaintime,
   rent,
@@ -25,9 +28,11 @@ function Description({ type, itemdetail }) {
   const [collat, setCollat] = useState(0);
   const [decimal, setDecimal] = useState(1);
   const [isApprove, setIsApprove] = useState(false);
+  const [delay, setDelay] = useState();
   const onChange = (e) => setInputday(e.target.value);
   const collatchange = (e) => setCollat(e.target.value);
   const onChangeval = (e) => setInputval(e.target.value);
+  const day = 60*60*24
 
   async function fetchblock() {
     try {
@@ -47,7 +52,15 @@ function Description({ type, itemdetail }) {
 
   async function fetchdecimal() {
     try {
-      setDecimal(await getDecimal(itemdetail.collateral_token));
+      setDecimal(10 ** parseInt(await getDecimal(itemdetail.collateral_token)));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function fetchDelay() {
+    try {
+      setDelay(parseInt(await getDelay(itemdetail.collateral_token)));
     } catch (e) {
       console.log(e);
     }
@@ -62,18 +75,19 @@ function Description({ type, itemdetail }) {
       console.log(e);
     }
   }
-
   useEffect(() => {
     fetchblock();
     fetchdecimal();
     fetchname();
     fetchallowance();
-  }, [fetchblock, fetchdecimal, fetchname, fetchallowance]);
+    fetchDelay();
+  }, [fetchblock, fetchdecimal, fetchname, fetchallowance, fetchDelay]);
 
   const OPTIONS = [
-    { value: "0", name: "max rent duration" },
-    { value: "1", name: "collateral amount" },
-    { value: "2", name: "rent fee per block" },
+    { value: undefined, name : "Select Options", denominator : 0},
+    { value: 0, name: "max rent duration", denominator : day },
+    { value: 1, name: "collateral amount", denominator : decimal},
+    { value: 2, name: "rent fee per day", denominator : decimal / day },
   ];
 
   const currentAddress = window.klaytn.selectedAddress;
@@ -81,35 +95,33 @@ function Description({ type, itemdetail }) {
     return (
       <div>
         <p>
-          이름 : {itemdetail.nft_name} #{itemdetail.token_id}
+          이름 : {itemdetail.nft_name}
         </p>
         <p> 소유자 : {itemdetail.holder_account}</p>
         <p>
           {" "}
-          담보 : {itemdetail.collateral_amount / 10 ** decimal} {name}
+          담보 : {itemdetail.collateral_amount / decimal} {name}
         </p>
         <p>
           {" "}
           대여료(일당) :{" "}
           {Math.round(
-            (itemdetail.rent_fee_per_block * 60 * 60 * 24) / 10 ** decimal
+            (itemdetail.rent_fee_per_block * day) / decimal
           )}{" "}
           {name}
         </p>
         <p>
           {" "}
-          최대 대여 일수 : {itemdetail.max_rent_duration / 60 / 60 / 24} days
+          최대 대여 일수 : {itemdetail.max_rent_duration / day} days
         </p>
         <p>
           총 대여료 :{" "}
           {Math.round(
             (parseInt(itemdetail.collateral_amount) +
               inputday *
-                60 *
-                60 *
-                24 *
+              day * 
                 parseInt(itemdetail.rent_fee_per_block)) /
-              10 ** decimal
+             decimal
           )}{" "}
           {name}
         </p>
@@ -121,7 +133,7 @@ function Description({ type, itemdetail }) {
                 rent(
                   itemdetail.collection_address,
                   itemdetail.token_id,
-                  inputday * 60 * 60 * 24
+                  inputday * day
                 )
               }
               text={type}
@@ -139,30 +151,34 @@ function Description({ type, itemdetail }) {
     return (
       <div>
         <p>
-          이름 : {itemdetail.nft_name} #{itemdetail.token_id}
+          이름 : {itemdetail.nft_name}
         </p>
         <p> 대여자 : {itemdetail.renter_accounts}</p>
         <p>
           {" "}
-          담보 : {itemdetail.collateral_amount} {name}
+          담보 : {itemdetail.collateral_amount / decimal} {name}
         </p>
         <p>
           {" "}
-          대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+          대여료(일당) : {itemdetail.rent_fee_per_block * day / decimal} {name}
         </p>
-        <p> 대여 일수 : {itemdetail.max_rent_duration} days</p>
+        <p> 대여 일수 : {itemdetail.max_rent_duration /day} days</p>
         <p> 대여 일자 : {itemdetail.rent_block} days</p>
         <p>
           총 대여료 :{" "}
-          {parseInt(itemdetail.collateral_amount) +
-            parseInt(itemdetail.rent_fee)}
+          {(parseInt(itemdetail.collateral_amount) +
+            parseInt(itemdetail.rent_fee)) / decimal}
         </p>
-        <Button
-          onClick={() =>
-            rent(itemdetail.collection_address, itemdetail.token_id, inputday)
-          }
-          text={type}
-        ></Button>
+
+        {block - itemdetail.rent_block > itemdetail.rent_duration ? (
+                  <Button onClick={() => kickNFT(itemdetail.collection_address, itemdetail.token_id) } text={"Kick!"}></Button>
+                ) : (
+                  <p>
+                    {remaintime(
+                      parseInt(itemdetail.rent_block) + parseInt(itemdetail.rent_duration) - block
+                    )}
+                  </p>
+                )}
       </div>
     );
   } else if (type === "Mypage") {
@@ -171,28 +187,24 @@ function Description({ type, itemdetail }) {
         {!itemdetail.renter_accounts ? (
           <div>
             <p>
-              이름 : {itemdetail.nft_name} #{itemdetail.token_id}
+              이름 : {itemdetail.nft_name}
             </p>
             <p> 소유자 : {itemdetail.holder_account}</p>
             <p>
               {" "}
-              담보 : {itemdetail.collateral_amount} {name}
+              담보 : {itemdetail.collateral_amount / decimal} {name}
             </p>
             <p>
               {" "}
-              대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+              대여료(일당) : {itemdetail.rent_fee_per_block * day / decimal} {name}
             </p>
-            <p> 최대 대여 일수 : {itemdetail.max_rent_duration} days</p>
-            <p>
-              총 대여료 :{" "}
-              {parseInt(itemdetail.collateral_amount) +
-                inputday * itemdetail.rent_fee_per_block}
-            </p>
+            <p> 최대 대여 일수 : {itemdetail.max_rent_duration / day} days</p>
             <SelectBox
               options={OPTIONS}
               defaultValue="0"
               handlechange={collatchange}
             ></SelectBox>
+            
             <Input
               onChange={onChangeval}
               placeholder="값을 넣어주세요!"
@@ -203,7 +215,7 @@ function Description({ type, itemdetail }) {
                   itemdetail.collection_address,
                   itemdetail.token_id,
                   collat,
-                  inputval
+                  Math.round(inputval * OPTIONS[Number(collat) + 1].denominator)
                 )
               }
               text={"Modify"}
@@ -223,30 +235,30 @@ function Description({ type, itemdetail }) {
             {itemdetail.holder_account === currentAddress ? (
               <div>
                 <p>
-                  이름 : {itemdetail.nft_name} #{itemdetail.token_id}
+                  이름 : {itemdetail.nft_name}
                 </p>
                 <p> 대여자 : {itemdetail.renter_accounts}</p>
                 <p>
                   {" "}
-                  담보 : {itemdetail.collateral_amount} {name}
+                  담보 : {itemdetail.collateral_amount / decimal} {name}
                 </p>
                 <p>
                   {" "}
-                  대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+                  대여료(일당) : {Math.round(itemdetail.rent_fee_per_block * day / decimal)} {name}
                 </p>
-                <p> 대여 일수 : {itemdetail.max_rent_duration} days</p>
+                <p> 대여 일수 : {itemdetail.max_rent_duration /day} days</p>
                 <p> 대여 일자 : {itemdetail.rent_block}</p>
                 <p>
                   총 대여료 :{" "}
-                  {parseInt(itemdetail.collateral_amount) +
-                    parseInt(itemdetail.rent_fee)}
+                  {(parseInt(itemdetail.collateral_amount) +
+                    parseInt(itemdetail.rent_fee)) / decimal}
                 </p>
                 {block - itemdetail.rent_block > itemdetail.rent_duration ? (
                   <Button onClick={() => Withdraw(itemdetail.collection_address, itemdetail.token_id) } text={"Withdraw!"}></Button>
                 ) : (
                   <p>
                     {remaintime(
-                      itemdetail.rent_block + itemdetail.rent_duration - block
+                      parseInt(itemdetail.rent_block) + parseInt(itemdetail.rent_duration) - block + delay
                     )}
                   </p>
                 )}
@@ -254,23 +266,23 @@ function Description({ type, itemdetail }) {
             ) : (
               <div>
                 <p>
-                  이름 : {itemdetail.nft_name} #{itemdetail.token_id}
+                  이름 : {itemdetail.nft_name}
                 </p>
                 <p> 대여자 : {itemdetail.renter_accounts}</p>
                 <p>
                   {" "}
-                  담보 : {itemdetail.collateral_amount} {name}
+                  담보 : {itemdetail.collateral_amount / decimal} {name}
                 </p>
                 <p>
                   {" "}
-                  대여료(일당) : {itemdetail.rent_fee_per_block} {name}
+                  대여료(일당) : {itemdetail.rent_fee_per_block * day / decimal} {name}
                 </p>
-                <p> 대여 일수 : {itemdetail.max_rent_duration} days</p>
+                <p> 대여 일수 : {itemdetail.max_rent_duration /day} days</p>
                 <p> 대여 Block : {itemdetail.rent_block}</p>
                 <p>
                   총 대여료 :{" "}
-                  {parseInt(itemdetail.collateral_amount) +
-                    parseInt(itemdetail.rent_fee)}
+                  {(parseInt(itemdetail.collateral_amount) +
+                    parseInt(itemdetail.rent_fee)) /decimal}
                 </p>
                 <Button onClick={() => approve(itemdetail.collection_address, itemdetail.token_id)} text={"approve!"}></Button>
                 <Button onClick={() => returnNFT(itemdetail.collection_address, itemdetail.token_id)} text={"Return NFT!"} />
