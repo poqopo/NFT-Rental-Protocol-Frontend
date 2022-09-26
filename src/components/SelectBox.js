@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 const SelectBoxWrapper = styled.div`
 	display: flex;
+	justify-content : center;
 `;
 
 export const Select = styled.select`
 	margin: 0;
-	min-width: 0;
-	display: block;
+	display: flex;
 	width: 100%;
 	padding: 8px 8px;
 	font-size: inherit;

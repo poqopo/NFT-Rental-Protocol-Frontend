@@ -7,29 +7,22 @@ import SelectBox from "../components/SelectBox";
 import BigNumber from "bignumber.js";
 
 const StyledList = styled.div`
- margin : 5% 10%;
- width : 33%
- height : 100%
- border: 1px solid blue;
+ margin : 5% auto;;
+ width : 33%;
+ height : 100%;
  border-radius: 30px;
  text-align : center;
  font-size: 18px;
  font-weight: 800;
- background-color : skyblue;
+ background-color : rgba(255, 116, 0, 0.5);
 `;
+
 
 const Items = styled.div`
   display: flex;
   flex-direction: column;
   margin: auto;
   padding: 2% 0;
-`;
-
-const Item = styled.div`
-  display: flex;
-  padding 1% 15%;
-  text-align: start;
-  justify-content: space-between;
 `;
 
 function List() {
@@ -42,79 +35,65 @@ function List() {
 
   const onChangecolladdr = (e) => setCollectionAddr(e.target.value);
   const onChangetokenid = (e) => setTokenId(e.target.value);
-  const onChangecollattoken = (e) => {setCollattoken(e.target.value)};
+  const onChangecollattoken = (e) => {
+    setCollattoken(e.target.value);
+  };
   const onChangecollatamount = (e) => setCollatamount(e.target.value);
   const onChangemaxrent = (e) => setMaxRent(e.target.value);
   const onChangerentfee = (e) => setRentfee(e.target.value);
 
   const OPTIONS = [
     { value: "", name: "Please select collateral" },
-    { value: "0xbde2ad922cd2e2c736050a2f21408fd501fc2492", name: "MTK", decimal : 1e18 },
+    {
+      value: "0xbde2ad922cd2e2c736050a2f21408fd501fc2492",
+      name: "MTK",
+      decimal: 1e18,
+    },
   ];
 
   const list = async () => {
     const maxrentblock = await daytoblock(maxrent);
-    console.log(BigNumber(rentfee * OPTIONS[1].decimal /60/60/24))
+    console.log(BigNumber((rentfee * OPTIONS[1].decimal) / 60 / 60 / 24));
     await listNFT(
       collectionaddr,
       collattoken,
       tokenid,
       maxrentblock,
       BigNumber(collatamount * OPTIONS[1].decimal),
-      BigNumber(Math.round(rentfee * OPTIONS[1].decimal /60/60/24))
+      BigNumber(Math.round((rentfee * OPTIONS[1].decimal) / 60 / 60 / 24))
     );
   };
 
-
+  const Listinput = ({text, placeholder, onChange}) => {
+    return (
+      <div>
+        <p>{text}</p>
+        <Input placeholder={placeholder} onChange={() => onChange} />
+      </div>
+    );
+  };
 
   return (
     <StyledList>
       <h3 class="text-center">Fill in the blank to list your NFT!</h3>
       <Items>
-        <Item class="flex flex-row place-content-between">
-          <div>컬렉션 주소를 입력해주세요.</div>
-          <div>
-            <Input
-              placeholder="Contract Address"
-              onChange={onChangecolladdr}
-            ></Input>
-          </div>
-        </Item>
-        <Item class="flex flex-row place-content-between">
-          <div>토큰 ID를 입력해주세요.</div>
-          <Input placeholder="token id" onChange={onChangetokenid}></Input>
-        </Item>
-        <Item class="flex flex-row place-content-between">
-          <div>담보토큰을 선택해주세요.</div>
+        <Listinput text="컬렉션 주소" placeholder="Address" onChange={onChangecolladdr}/>
+        <a href={window.klaytn.selectedAddress ? `https://baobab.scope.klaytn.com/account/${window.klaytn.selectedAddress}?tabId=kip17Balance` : "https://baobab.scope.klaytn.com/"} target="_blank">컬렉션 주소를 모르겠어요!</a>
+        <Listinput text="토큰 ID" placeholder="number" onChange={onChangetokenid}/>
+          <div>담보토큰</div>
           <SelectBox
-              options={OPTIONS}
-              defaultValue="1"
-              handlechange={onChangecollattoken}
-            ></SelectBox>
-        </Item>
-        <Item class="flex flex-row place-content-between">
-          <div>담보로 받을 토큰 양을 입력해주세요.</div>
-          <Input
-            placeholder="Collateral Amount"
-            onChange={onChangecollatamount}
-          ></Input>
-        </Item>
-        <Item class="flex flex-row place-content-between">
-          <div>최대 담보 기간을 입력해주세요 </div>
-          <Input
-            placeholder="Maxrent Duration"
-            onChange={onChangemaxrent}
-          ></Input>
-        </Item>
-        <Item class="flex flex-row place-content-between">
-          <div>일당 받을 렌탈료를 입력해주세요.</div>
-          <Input
-            placeholder="Maxrent Duration"
-            onChange={onChangerentfee}
-          ></Input>
-        </Item>
+            options={OPTIONS}
+            defaultValue="1"
+            handlechange={onChangecollattoken}
+          ></SelectBox>
+        <Listinput text="담보 양" placeholder="number" onChange={onChangecollatamount}/>
+        <Listinput text="최대 대여 기간" placeholder="Maxrent Duration" onChange={onChangemaxrent}/>
+        <Listinput text="일당 대여료" placeholder="number" onChange={onChangerentfee}/>
       </Items>
-      <Button onClick={() => approve(collectionaddr, tokenid)} text={"approve!"}></Button>
+      <Button
+        onClick={() => approve(collectionaddr, tokenid)}
+        text={"approve!"}
+      ></Button>
       <Button onClick={list} text={"List!"}></Button>
     </StyledList>
   );

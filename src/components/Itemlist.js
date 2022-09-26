@@ -17,7 +17,7 @@ const Item = styled.div`
   text-align: center;
   font-size: 14px;
   font-weight: 400;
-  border: 1px solid blue;
+  border: 2px solid #FF8826;
   border-radius: 30px;
 
   & .image {

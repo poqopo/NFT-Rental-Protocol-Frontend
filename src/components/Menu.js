@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 const StyledMenu = styled.div`
   position: static;
-  border: 1px solid blue;
   border-radius: 30px;
+  background-color : rgba(255, 136, 38, 0.25);
   text-align: center;
   width: 224px;
   height : 650px;

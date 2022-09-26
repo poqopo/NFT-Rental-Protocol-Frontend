@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Itemlist from "../components/Itemlist";
 
 const StyledKick = styled.div`
-  border: 1px solid blue;
+  border: 1px solid #FF8826;
   border-radius: 30px;
   margin-top: 30px;
   display: flex;
@@ -27,7 +27,7 @@ function Mypage() {
       <Image>
         <img
           className="image"
-          src="https://miya.sunmiya.club/1319.png"
+          src="/avatar.png"
           alt="Workflow"
         />
         <p>{currentAddress}</p>

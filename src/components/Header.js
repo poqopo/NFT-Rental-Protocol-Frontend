@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "./Button,";
 import Input from "./Input";
 
 const StyledHeader = styled.div`
-  border: 1px solid blue;
-  border-radius: 30px;
+
+  background-color : rgba(255, 183, 123, 0.25);
   width: 100%;
   height: 60px;
   display: flex;
@@ -50,9 +50,11 @@ function Header() {
   const [currentAddress, setCurrentAddress] = useState(
     window.klaytn ? window.klaytn.selectedAddress : undefined
   );
-  const [serachname, setSearchname] = useState('');
+  const [serachname, setSearchname] = useState("");
 
-  const onChange = (e) => setSearchname(e.target.value)
+  const onChange = (e) => setSearchname(e.target.value);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onLoad = async () => {
@@ -97,11 +99,15 @@ function Header() {
     <StyledHeader>
       <Items>
         <Logo>
-          <img src="/logo192.png" width="28px" alt="Workflow" />
+          <Link to={"/"}>
+            <img src="/logo.png" width="120px" alt="Workflow" scale="1.5" />
+          </Link>
         </Logo>
         <div className="serach-bar">
           <Input placeholder={"components"} onChange={onChange} />
-          <Button text={<Link to={`/search/${serachname}`}>Search!</Link>}></Button>
+          <Button
+            text={<Link to={`/search/${serachname}`}>Search!</Link>}
+          ></Button>
         </div>
       </Items>
       <Items>
@@ -109,16 +115,12 @@ function Header() {
         <Link to={"/kick"}>Kick</Link>
 
         <Button
-          onClick={isWalletConnected ? () => "" : connectKaikas}
-          text={
-            isWalletConnected ? (
-              <Link to={`/Mypage/${currentAddress}`}>
-                {currentAddress.slice(0, 10)}
-              </Link>
-            ) : (
-              "Connect"
-            )
+          onClick={
+            isWalletConnected
+              ? () => navigate(`/Mypage/${currentAddress}`)
+              : connectKaikas
           }
+          text={isWalletConnected ? currentAddress.slice(0, 10) : "Connect"}
         ></Button>
       </Items>
     </StyledHeader>

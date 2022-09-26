@@ -5,7 +5,7 @@ import Detail from "../components/Detail";
 
 const StyledItemdetail = styled.div`
   margin: 5% 8%;
-  border: 1px solid blue;
+  border: 1px solid #FF8826;
   border-radius: 30px;
   margin-top: 5%;
 `;

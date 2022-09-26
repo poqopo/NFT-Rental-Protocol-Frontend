@@ -5,8 +5,6 @@ import Itemlist from "../components/Itemlist";
 import Button from "../components/Button,";
 
 const StyledHome = styled.div`
-  border: 1px solid blue;
-  border-radius: 30px;
   width: full;
   height: full;
   margin-top: 30px;
@@ -16,8 +14,8 @@ const StyledHome = styled.div`
 `;
 
 const Listbutton = styled.div`
-  border: 1px solid blue;
   border-radius: 30px;
+  background-color : rgba(255, 159, 79, 0.5);
   margin: 3% auto;
   padding: 2% 2%;
   width: 50%;
@@ -35,7 +33,7 @@ const Listbutton = styled.div`
 `;
 
 const Layout = styled.div`
-border: 1px solid blue;
+border: 1px solid #FF8826;
 border-radius: 30px;
 width: full;
 height: full;
@@ -45,21 +43,7 @@ display: flex;
 
 function Home() {
   return (
-    // <div>
-    //   <Listbutton>
-    //       <div className="listtext">
-    //         Do you want to list your NFT for addtional profit?
-    //         click the button to list your NFT
-    //       </div>
-    //     <Link className="listbutton" to={'/List'}>
-    //       <Button text={"List your NFT!"}></Button>
-    //     </Link>
-    //   </Listbutton>
-    //   <StyledHome>
-    //     <Menu/>
-    //     <Itemlist type={"listed"} link={"Rent"}/>
-    //   </StyledHome>
-    // </div>
+
     <StyledHome>
       <Listbutton>
         <div className="listtext">
