@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Menu from "../components/Menu";
 import Itemlist from "../components/Itemlist";
 import Button from "../components/Button,";
+import { useEffect } from "react";
 
 const StyledHome = styled.div`
   width: full;
@@ -42,8 +43,12 @@ display: flex;
 `
 
 function Home() {
-  return (
 
+  // const location = useLocation()
+  // const [query, setQuery]
+  // useEffect(())
+
+  return (
     <StyledHome>
       <Listbutton>
         <div className="listtext">

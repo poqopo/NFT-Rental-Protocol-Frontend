@@ -54,7 +54,7 @@ function Itemlist({ type, link }) {
         {itemlist.map((info, index) => (
           <Item>
             <h3>
-              이름 : {info.nft_name}
+              이름 : {info.nft_name} #{info.token_id}
             </h3>
             <Link to={`/${info.collection_address}/${info.token_id}/${link ? link : info.link}`}>
               <img className="image" src={info.nft_image} alt="loading..." />

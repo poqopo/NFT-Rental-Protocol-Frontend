@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 const StyledMenu = styled.div`
+  margin: auto 0;
   position: static;
   border-radius: 30px;
   background-color : rgba(255, 136, 38, 0.25);
   text-align: center;
   width: 224px;
-  height : 650px;
   display: flex;
   flex-direction: column;
   font-size: 20px;
@@ -21,9 +21,6 @@ const StyledMenu = styled.div`
 function Menu() {
   return (
     <StyledMenu>
-      <p>Status</p>
-      <p className="subtitle">listed</p>
-      <p className="subtitle">Rented</p>
       <p>Price!</p>
       <p className="subtitle">Ascending</p>
       <p className="subtitle">Descending</p>

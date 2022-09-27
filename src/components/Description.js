@@ -94,7 +94,7 @@ function Description({ type, itemdetail }) {
   if (type === "Rent") {
     return (
       <div>
-        <p>이름 : {itemdetail.nft_name}</p>
+        <p>이름 : {itemdetail.nft_name} #{itemdetail.token_id}</p>
         <p> 소유자 : {itemdetail.holder_account}</p>
         <p>
           {" "}
@@ -140,7 +140,7 @@ function Description({ type, itemdetail }) {
   } else if (type === "Kick") {
     return (
       <div>
-        <p>이름 : {itemdetail.nft_name}</p>
+        <p>이름 : {itemdetail.nft_name} #{itemdetail.token_id}</p>
         <p> 대여자 : {itemdetail.renter_accounts}</p>
         <p>
           {" "}
@@ -237,7 +237,7 @@ function Description({ type, itemdetail }) {
           <div>
             {itemdetail.holder_account === currentAddress ? (
               <div>
-                <p>이름 : {itemdetail.nft_name}</p>
+                <p>이름 : {itemdetail.nft_name} #{itemdetail.token_id}</p>
                 <p> 대여자 : {itemdetail.renter_accounts}</p>
                 <p>
                   {" "}
@@ -282,7 +282,7 @@ function Description({ type, itemdetail }) {
               </div>
             ) : (
               <div>
-                <p>이름 : {itemdetail.nft_name}</p>
+                <p>이름 : {itemdetail.nft_name} #{itemdetail.token_id}</p>
                 <p> 대여자 : {itemdetail.renter_accounts}</p>
                 <p>
                   {" "}

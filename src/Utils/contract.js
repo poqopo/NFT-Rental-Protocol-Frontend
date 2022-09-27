@@ -13,6 +13,15 @@ const rentcontract = new caver.klay.Contract(
 );
 export const MAX_UNIT = (2 ** 256 - 1) / 10;
 
+export   const OPTIONS = [
+  { value: "", name: "Please select collateral" },
+  {
+    value: "0xbde2ad922cd2e2c736050a2f21408fd501fc2492",
+    name: "MTK",
+    decimal: 1e18,
+  },
+];
+
 export async function approve(collection, tokenid) {
   try {
     const collection_address = new caver.klay.Contract(
