@@ -18,12 +18,11 @@ const Item = styled.div`
   font-size: 14px;
   font-weight: 400;
   border: 2px solid #FF8826;
-  border-radius: 30px;
 
   & .image {
     margin-top: 5%;
-    width: 80%;
-    height: 80%;
+    width: 300px;
+    height: 300px;
   }
 `;
 
@@ -54,7 +53,7 @@ function Itemlist({ type, link }) {
         {itemlist.map((info, index) => (
           <Item>
             <h3>
-              이름 : {info.nft_name} #{info.token_id}
+              Name : {info.nft_name} #{info.token_id}
             </h3>
             <Link to={`/${info.collection_address}/${info.token_id}/${link ? link : info.link}`}>
               <img className="image" src={info.nft_image} alt="loading..." />
@@ -66,7 +65,7 @@ function Itemlist({ type, link }) {
   } else {
     return (
       <div>
-        <h3>파일을 가져오는데 실패하였습니다. 잠시후에 다시 이용해주세요.</h3>
+        <h3>Failed to fetch data. Please Refresh</h3>
       </div>
     );
   }

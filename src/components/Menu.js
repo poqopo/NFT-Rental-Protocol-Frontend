@@ -11,6 +11,7 @@ const StyledMenu = styled.div`
   flex-direction: column;
   font-size: 20px;
   font-weight: 800;
+  text-decoration : none;
 
   & .subtitle {
     font-size: 14px;
@@ -28,6 +29,9 @@ function Menu() {
       <p className="subtitle">WKLAY</p>
       <p className="subtitle">KUSDT</p>
       <p>Rent Duration</p>
+      <p className="subtitle">Ascending</p>
+      <p className="subtitle">Descending</p>
+      <p>Rentfee!</p>
       <p className="subtitle">Ascending</p>
       <p className="subtitle">Descending</p>
     </StyledMenu>

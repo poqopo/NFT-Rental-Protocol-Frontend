@@ -94,20 +94,20 @@ function Description({ type, itemdetail }) {
   if (type === "Rent") {
     return (
       <div>
-        <p>이름 : {itemdetail.nft_name} #{itemdetail.token_id}</p>
-        <p> 소유자 : {itemdetail.holder_account}</p>
+        <p>Name : {itemdetail.nft_name} #{itemdetail.token_id}</p>
+        <p> Owner : {itemdetail.holder_account}</p>
         <p>
           {" "}
-          담보 : {itemdetail.collateral_amount / decimal} {name}
+          Collateral : {itemdetail.collateral_amount / decimal} {name}
         </p>
         <p>
           {" "}
-          대여료(일당) :{" "}
+          Rent fee(per day) :{" "}
           {Math.round((itemdetail.rent_fee_per_block * day) / decimal)} {name}
         </p>
-        <p> 최대 대여 일수 : {itemdetail.max_rent_duration / day} days</p>
+        <p> Max Rent days : {itemdetail.max_rent_duration / day} days</p>
         <p>
-          총 대여료 :{" "}
+          total Rent fee :{" "}
           {Math.round(
             (parseInt(itemdetail.collateral_amount) +
               inputday * day * parseInt(itemdetail.rent_fee_per_block)) /
@@ -140,21 +140,21 @@ function Description({ type, itemdetail }) {
   } else if (type === "Kick") {
     return (
       <div>
-        <p>이름 : {itemdetail.nft_name} #{itemdetail.token_id}</p>
-        <p> 대여자 : {itemdetail.renter_accounts}</p>
+        <p>Name : {itemdetail.nft_name} #{itemdetail.token_id}</p>
+        <p> Renter : {itemdetail.renter_accounts}</p>
         <p>
           {" "}
-          담보 : {itemdetail.collateral_amount / decimal} {name}
+          Collateral : {itemdetail.collateral_amount / decimal} {name}
         </p>
         <p>
           {" "}
-          대여료(일당) : {(itemdetail.rent_fee_per_block * day) / decimal}{" "}
+          Rent fee(per day) : {(itemdetail.rent_fee_per_block * day) / decimal}{" "}
           {name}
         </p>
-        <p> 대여 일수 : {itemdetail.max_rent_duration / day} days</p>
-        <p> 대여 일자 : {itemdetail.rent_block} days</p>
+        <p> Rent days : {itemdetail.max_rent_duration / day} days</p>
+        <p> Rent block : {itemdetail.rent_block} days</p>
         <p>
-          총 대여료 :{" "}
+          total Rent fee :{" "}
           {(parseInt(itemdetail.collateral_amount) +
             parseInt(itemdetail.rent_fee)) /
             decimal}
@@ -184,25 +184,25 @@ function Description({ type, itemdetail }) {
         {!itemdetail.renter_accounts ? (
           <div>
             <p>
-              이름 : {itemdetail.nft_name} #{itemdetail.token_id}
+              Name : {itemdetail.nft_name} #{itemdetail.token_id}
             </p>
-            <p> 소유자 : {itemdetail.holder_account}</p>
+            <p> Owner : {itemdetail.holder_account}</p>
             <p>
               {" "}
-              담보 :{" "}
+              Collateral :{" "}
               {Math.round((itemdetail.collateral_amount / decimal) * 100) /
                 100}{" "}
               {name}
             </p>
             <p>
               {" "}
-              대여료(일당) :{" "}
+              Rent fee(per day) :{" "}
               {Math.round(
                 ((itemdetail.rent_fee_per_block * day) / decimal) * 100
               ) / 100}{" "}
               {name}
             </p>
-            <p> 최대 대여 일수 : {itemdetail.max_rent_duration / day} days</p>
+            <p> Max Rent days : {itemdetail.max_rent_duration / day} days</p>
             
               <SelectBox
                 options={OPTIONS}
@@ -237,24 +237,24 @@ function Description({ type, itemdetail }) {
           <div>
             {itemdetail.holder_account === currentAddress ? (
               <div>
-                <p>이름 : {itemdetail.nft_name} #{itemdetail.token_id}</p>
-                <p> 대여자 : {itemdetail.renter_accounts}</p>
+                <p>Name : {itemdetail.nft_name} #{itemdetail.token_id}</p>
+                <p> Renter : {itemdetail.renter_accounts}</p>
                 <p>
                   {" "}
-                  담보 : {itemdetail.collateral_amount / decimal} {name}
+                  Collateral : {itemdetail.collateral_amount / decimal} {name}
                 </p>
                 <p>
                   {" "}
-                  대여료(일당) :{" "}
+                  Rent fee(per day) :{" "}
                   {Math.round(
                     (itemdetail.rent_fee_per_block * day) / decimal
                   )}{" "}
                   {name}
                 </p>
-                <p> 대여 일수 : {itemdetail.max_rent_duration / day} days</p>
-                <p> 대여 일자 : {itemdetail.rent_block}</p>
+                <p> Rent days : {itemdetail.max_rent_duration / day} days</p>
+                <p> Rent block : {itemdetail.rent_block}</p>
                 <p>
-                  총 대여료 :{" "}
+                  total Rent fee :{" "}
                   {(parseInt(itemdetail.collateral_amount) +
                     parseInt(itemdetail.rent_fee)) /
                     decimal}
@@ -282,21 +282,21 @@ function Description({ type, itemdetail }) {
               </div>
             ) : (
               <div>
-                <p>이름 : {itemdetail.nft_name} #{itemdetail.token_id}</p>
-                <p> 대여자 : {itemdetail.renter_accounts}</p>
+                <p>Name : {itemdetail.nft_name} #{itemdetail.token_id}</p>
+                <p> Renter : {itemdetail.renter_accounts}</p>
                 <p>
                   {" "}
-                  담보 : {itemdetail.collateral_amount / decimal} {name}
+                  Collateral : {itemdetail.collateral_amount / decimal} {name}
                 </p>
                 <p>
                   {" "}
-                  대여료(일당) :{" "}
+                  Rent fee(per day) :{" "}
                   {(itemdetail.rent_fee_per_block * day) / decimal} {name}
                 </p>
-                <p> 대여 일수 : {itemdetail.max_rent_duration / day} days</p>
+                <p> Rent days : {itemdetail.max_rent_duration / day} days</p>
                 <p> 대여 Block : {itemdetail.rent_block}</p>
                 <p>
-                  총 대여료 :{" "}
+                  total Rent fee :{" "}
                   {(parseInt(itemdetail.collateral_amount) +
                     parseInt(itemdetail.rent_fee)) /
                     decimal}

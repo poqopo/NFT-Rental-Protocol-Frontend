@@ -1,5 +1,5 @@
-import { memo, useState } from "react";
-import { daytoblock, listNFT, approve, blocktoday } from "../Utils/contract";
+import { useState } from "react";
+import { daytoblock, listNFT, approve } from "../Utils/contract";
 import styled from "styled-components";
 import Button from "../components/Button,";
 import SelectBox from "../components/SelectBox";
@@ -16,6 +16,7 @@ const StyledList = styled.div`
   font-size: 18px;
   font-weight: 800;
   background-color: rgba(255, 116, 0, 0.5);
+  text-decoration : none;
 `;
 
 const Items = styled.div`
@@ -40,8 +41,6 @@ function List() {
   const onChangemaxrent = (e) => setMaxRent(e.target.value);
   const onChangerentfee = (e) => setRentfee(e.target.value);
 
-
-
   const list = async () => {
     const maxrentblock = await daytoblock(maxrent);
     console.log(BigNumber((rentfee * OPTIONS[1].decimal) / 60 / 60 / 24));
@@ -55,13 +54,12 @@ function List() {
     );
   };
 
-
   return (
     <StyledList>
       <h3 class="text-center">Fill in the blank to list your NFT!</h3>
       <Items>
         <Listinput
-          text="컬렉션 주소"
+          text="Collection Address"
           placeholder="Address"
           onChange={onChangecolladdr}
         />
@@ -73,30 +71,30 @@ function List() {
           }
           target="_blank"
         >
-          컬렉션 주소를 모르겠어요!
+          Find Collection Address
         </a>
         <Listinput
-          text="토큰 ID"
+          text="Token ID"
           placeholder="number"
           onChange={onChangetokenid}
         />
-        <div>담보토큰</div>
+        <div>Collateral token</div>
         <SelectBox
           options={OPTIONS}
           handlechange={onChangecollattoken}
         ></SelectBox>
         <Listinput
-          text="담보 양"
+          text="Collateral amount"
           placeholder="number"
           onChange={onChangecollatamount}
         />
         <Listinput
-          text="최대 대여 기간"
+          text="Max rent duration"
           placeholder="Maxrent Duration"
           onChange={onChangemaxrent}
         />
         <Listinput
-          text="일당 대여료"
+          text="Rent fee per day"
           placeholder="number"
           onChange={onChangerentfee}
         />

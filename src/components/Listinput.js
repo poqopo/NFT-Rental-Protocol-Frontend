@@ -5,7 +5,7 @@ const Listinput = ({ text, placeholder, onChange }) => {
     return (
       <div>
         <p>{text}</p>
-        <Input placeholder={placeholder} onChange={() => onChange} />
+        <Input placeholder={placeholder} onChange={onChange} />
       </div>
     );
   };

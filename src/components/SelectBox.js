@@ -9,7 +9,7 @@ const SelectBoxWrapper = styled.div`
 export const Select = styled.select`
 	margin: 0;
 	display: flex;
-	width: 100%;
+	width: 80%;
 	padding: 8px 8px;
 	font-size: inherit;
 	line-height: inherit;
