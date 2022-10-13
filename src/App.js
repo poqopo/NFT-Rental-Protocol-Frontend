@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./Components/Header/Header";
-import Home from "./pages/Home/Home";
+import Header from "./Components/Header";
+import Collection from "./pages/Collection";
+import Home from "./pages/Home";
 
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/:collectionAddress" element={<Collection/>}/>
       </Routes>
     </Router>
   );
