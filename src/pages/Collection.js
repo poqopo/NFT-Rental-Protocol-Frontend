@@ -2,8 +2,10 @@ import Itemlist from "../Components/Itemlist";
 import styled from "styled-components";
 import Background from "../Components/Background";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
-const StyledHome = styled.div`
+const StyledCollection = styled.div`
   position: relative;
   top: 80px;
   width : 100%;
@@ -35,15 +37,34 @@ const StyledHome = styled.div`
 
 export default function Collection() {
     const params = useParams()
+    const [metadata, setMetadata] = useState()
+    async function searchApi() {
+      const url =
+        process.env.REACT_APP_API_URL +
+        `/collection/${params.collectionAddress}`;
+      await axios
+        .get(url)
+        .then(function (response) {
+          setMetadata(response.data);
+          console.log("성공");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    useEffect(() => {
+      searchApi();
+    }, []);
+    
   return (
-    <StyledHome>
+    <StyledCollection>
       <div className="background">
         <Background/>
       </div>
       <p className="Title">{params.collectionAddress}</p>
       <div className="list">
-        <Itemlist category={"collection"} subject={params.collectionAddress}/>
+        <Itemlist category={"collection"} subject={'nfts'} detail={params.collectionAddress} />
       </div>
-    </StyledHome>
+    </StyledCollection>
   );
 }

@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <StyledHome>
       <div className="background">
-        <Background />
+        <Background url={'/background.jpg'}/>
       </div>
       <p className="Title">Collections</p>
       <div className="list">
