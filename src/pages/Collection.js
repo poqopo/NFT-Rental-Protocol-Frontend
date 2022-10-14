@@ -37,7 +37,7 @@ const StyledCollection = styled.div`
 
 export default function Collection() {
     const params = useParams()
-    const [metadata, setMetadata] = useState()
+    const [metadata, setMetadata] = useState({})
     async function searchApi() {
       const url =
         process.env.REACT_APP_API_URL +
@@ -59,9 +59,9 @@ export default function Collection() {
   return (
     <StyledCollection>
       <div className="background">
-        <Background/>
+        <Background url={metadata.banner ? metadata.banner : "/background.jpg"}/>
       </div>
-      <p className="Title">{params.collectionAddress}</p>
+      <p className="Title">{metadata?.name}</p>
       <div className="list">
         <Itemlist category={"collection"} subject={'nfts'} detail={params.collectionAddress} />
       </div>

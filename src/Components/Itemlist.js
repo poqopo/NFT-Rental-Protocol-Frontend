@@ -31,7 +31,8 @@ export default function Itemlist({ category, subject, detail }) {
   async function searchApi() {
     const url =
       process.env.REACT_APP_API_URL +
-      `/${category}/${subject}/${detail ? detail : ""}`;
+      `/${category}/${subject}/${detail? detail : ""}`;
+    console.log(url)
     await axios
       .get(url)
       .then(function (response) {
@@ -55,7 +56,7 @@ export default function Itemlist({ category, subject, detail }) {
               <img className="image" src={data.image} alt="loading..." />
             </Link>
             <h3>
-              Name : {data.name} {data.token_id ? data.token_id : ""}
+              Name : {data.name} {data.token_id? data.token_id : ""}
             </h3>
           </Item>
         </div>
