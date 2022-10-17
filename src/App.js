@@ -3,6 +3,7 @@ import Header from "./Components/Header";
 import Collection from "./pages/Collection";
 import Home from "./pages/Home";
 import Kick from "./pages/Kick";
+import MyPage from "./pages/Mypage";
 import NFT from "./pages/NFT";
 
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/Kick" element={<Kick />} />
         <Route path="/:collectionAddress" element={<Collection/>}/>
         <Route path="/:collectionAddress/:token_id" element={<NFT/>}/>
+        <Route path="/User" element={<MyPage/>}/>
       </Routes>
     </Router>
   );

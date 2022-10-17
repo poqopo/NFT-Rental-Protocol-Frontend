@@ -27,6 +27,13 @@ const StyledHeader = styled.div`
     display: flex;
     place-content: space-between;
   }
+  
+  & .Input {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
   & .link {
     width: 40%;
@@ -59,12 +66,12 @@ export default function Header() {
           <p>Logo</p>
         </div>
         <div className="form">
-            <Input/>
+            <Input className="Input"/>
         </div>
         <div className="link">
           <a href="/">Explore</a>
           <a href="/Kick">Kick</a>
-          <a href="/Wallet">Connect</a>
+          <a href="/User">Connect</a>
         </div>
       </div>
     </StyledHeader>

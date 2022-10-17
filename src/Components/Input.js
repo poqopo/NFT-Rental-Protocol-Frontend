@@ -1,10 +1,6 @@
 import styled from "styled-components";
 
 const StyledInput = styled.div`
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 100%;
   padding : 10px; 
   background: rgba(0, 0, 0, 0.5);
