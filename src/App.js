@@ -16,7 +16,7 @@ function App() {
         <Route path="/Kick" element={<Kick />} />
         <Route path="/:collectionAddress" element={<Collection/>}/>
         <Route path="/:collectionAddress/:token_id" element={<NFT/>}/>
-        <Route path="/User" element={<MyPage/>}/>
+        <Route path="/User/:useraddress" element={<MyPage/>}/>
       </Routes>
     </Router>
   );

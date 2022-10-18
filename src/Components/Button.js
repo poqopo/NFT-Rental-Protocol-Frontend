@@ -51,10 +51,10 @@ html,body{
   }  
 `;
 
-export default function Button() {
+export default function Button({text, onClick}) {
   return (
     <StyledButton>
-      <button className="Button">Hello!</button>
+      <button className="Button" onClick={onClick}>{text}</button>
     </StyledButton>
   );
 }

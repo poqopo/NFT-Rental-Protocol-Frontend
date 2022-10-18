@@ -33,6 +33,18 @@ const StyledCollection = styled.div`
     margin : auto;
     width : 90%;
   }
+  & .description {
+    margin: auto;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.38;
+    letter-spacing: normal;
+    margin-bottom: 48px;
+    text-align: center;
+  }
 `;
 
 export default function Collection() {
@@ -55,13 +67,16 @@ export default function Collection() {
     useEffect(() => {
       searchApi();
     }, []);
+
+    console.log(metadata)
     
   return (
     <StyledCollection>
       <div className="background">
         <Background url={metadata.banner ? metadata.banner : "/background.jpg"}/>
       </div>
-      <p className="Title">{metadata?.name}</p>
+      <div className="Title">{metadata?.name}</div>
+      <div className="description">{metadata?.description}</div>
       <div className="list">
         <Itemlist category={"collection"} subject={'nfts'} detail={params.collectionAddress} />
       </div>

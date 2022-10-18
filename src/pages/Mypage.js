@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Background from "../Components/Background";
 import Button from "../Components/Button";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
 const StyledMyPage = styled.div`
@@ -36,7 +36,7 @@ const StyledMyPage = styled.div`
   }
 
   & .Toggle {
-    display : flex;
+    display: flex;
     place-content: space-evenly;
   }
 `;
@@ -53,7 +53,7 @@ const Image = styled.div`
   }
 `;
 const StyledActivity = styled.div`
-  margin : auto;
+  margin: auto;
   width: 80%;
   border: 1px solid blue;
 
@@ -62,33 +62,53 @@ const StyledActivity = styled.div`
     grid-template-columns: repeat(5, 20%);
   }
 
-  & .text{
+  & .text {
     overflow-x: hidden;
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
-    text-overflow : ellipsis;
+    text-overflow: ellipsis;
   }
 `;
 
 export default function MyPage() {
-    const params= useParams()
-    const [activity, setactivity] = useState([]);
-  const currentAddress = window.klaytn.selectedAddress;
+  const params = useParams();
+  const [metadata, setmetadata] = useState([]);
+  const [activity, setActivity] = useState([]);
+  const [isitem, setIsitem] = useState(false);
+
   async function searchApi() {
+    const url = process.env.REACT_APP_API_URL + `/user/${params.useraddress}`;
+    await axios
+      .get(url)
+      .then(function (response) {
+        setmetadata(response.data);
+        console.log("성공");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     const activityurl =
-    process.env.REACT_APP_API_URL +
-    `/NFT/${params.collectionAddress}/${params.token_id}/activity`;
-  await axios
-    .get(activityurl)
-    .then(function (response) {
-      setactivity(response.data);
-      console.log("성공");
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
+      process.env.REACT_APP_API_URL + `/user/activity/${params.useraddress}`;
+    await axios
+      .get(activityurl)
+      .then(function (response) {
+        setActivity(response.data);
+        console.log("성공");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  const onItem = useCallback(() => {
+    setIsitem(true);
+  }, [isitem]);
+
+  const onActivity = useCallback(() => {
+    setIsitem(false);
+  }, [isitem]);
 
   useEffect(() => {
     searchApi();
@@ -99,41 +119,52 @@ export default function MyPage() {
         <Background url={"/background.jpg"} />
       </div>
       <Image>
-        <img className="image" src="/avatar.png" alt="Workflow" />
-        <p>Hello!</p>
+        <img
+          className="image"
+          src={metadata.image ? metadata.image : "/avatar.png"}
+          alt="Workflow"
+        />
+        <p>{metadata?.nickname}</p>
       </Image>
       <div className="Toggle">
-        <Button></Button>
-        <Button></Button>
+        <Button onClick={onItem} text={"Items"}></Button>
+        <Button onClick={onActivity} text={"Activity"}></Button>
       </div>
 
-      <div className="list">
-        <Itemlist category={"user"} subject={"nfts"} detail={currentAddress}/>
-      </div>
-
-
-      <StyledActivity>
-          <div className="item">
-            <p>From</p>
-            <p>Event</p>
-            <p>Block</p>
-            <p>Collateral_amount</p>
-            <p>Rent_fee</p>
-          </div>
-        {activity? activity.map((data, index) => (
-            <div className="item" key={index}>
-              <p className="text">{data.from}</p>
-              <p>{data.event}</p>
-              <p>{data.block}</p>
-              <p>{data.collateral_amount}</p>
-              <p>{data.rent_fee}</p>
+      {isitem ? (
+        <div className="list">
+          <Itemlist
+            category={"user"}
+            subject={"nfts"}
+            detail={params.useraddress}
+          />
+        </div>
+      ) : (
+        <div className="list">
+          <StyledActivity>
+            <div className="item">
+              <p>From</p>
+              <p>Event</p>
+              <p>Block</p>
+              <p>Collateral_amount</p>
+              <p>Rent_fee</p>
             </div>
-          )) :
-          <div>No transcation before</div>
-          }
-        </StyledActivity>
-
-      <div></div>
+            {activity ? (
+              activity.map((data, index) => (
+                <div className="item" key={index}>
+                  <p className="text">{data.from}</p>
+                  <p>{data.event}</p>
+                  <p>{data.block}</p>
+                  <p>{data.collateral_amount}</p>
+                  <p>{data.rent_fee}</p>
+                </div>
+              ))
+            ) : (
+              <div>No transcation before</div>
+            )}
+          </StyledActivity>
+        </div>
+      )}
     </StyledMyPage>
   );
 }

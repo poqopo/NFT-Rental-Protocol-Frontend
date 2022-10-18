@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Button from "./Button";
 
 const StyledList = styled.div`
   margin: auto;
   width: 90%;
   display: grid;
-  grid-template-columns: repeat(2, 400px);
+  grid-template-columns: repeat(2, 500px);
   grid-auto-rows: 120px;
   grid-gap: 5%;
   place-content: center;
@@ -27,14 +28,19 @@ const Item = styled.div`
   & .image {
     width: 100%;
     height: auto;
-    max-width: 100px;
-    max-height: 100px;
   }
 
   & .text {
     display: block;
     width: 50%;
     padding-left: 20px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & .box {
+    position: absolute;
+    bottom: 0%;
   }
   a {
     color: black;
@@ -102,7 +108,9 @@ export default function Kicklist({ category, subject, detail }) {
                 )}
               </Link>
             </div>
-            <button>Kick!</button>
+            <div style={{display : "flex", alignItems : "center"}}>
+              <Button className="box" text={"Kick!"}></Button>
+            </div>
           </Item>
         </div>
       ))}

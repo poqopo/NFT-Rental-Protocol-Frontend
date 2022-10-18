@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Input from "../Components/Input";
+import Button from "../Components/Button";
+import Contents from "../Components/Contents";
 
 const StyledNFT = styled.div`
   position: relative;
@@ -15,30 +17,54 @@ const StyledNFT = styled.div`
   & .layout {
     margin: auto;
     padding: 5%;
-    width: 75%;
+    width: 80%;
   }
-  & .gridbox {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  & .flexbox {
+    margin: auto;
     width: 100%;
-    height: 100%;
+    height: 500px;
+    display: flex;
     border: 1px solid blue;
   }
   & .image-box {
-    width: 90%;
-    height: 100%;
+    width: 500px;
+    height: 500px;
   }
   img {
-    width: 90%;
-    height: 90%;
-  }
-  & .text {
-    display: block;
     width: 100%;
-    padding-left: 20px;
+    height: 100%;
+  }
+  & .nftinfo {
+    width: auto;
+    padding-left: 78px;
+    height: 125px;
+  }
+  & .rentinfo {
+    width : 100%;
+    height: 375px;
+    display: flex;
+    flex-direction: column;
+    place-content: space-around;
+    padding-left: 78px;   
+    font-size: px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+  & .kickinfo {
+    display : flex;
+    place-content : space-between;
+    height: 125px;
+  }
+
+  & .text {
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 1.2;
   }
   & .form {
-    display: block;
+    padding: 15px;
+    margin-top: 50px;
+    background-color: ivory;
     width: 90%;
   }
 `;
@@ -66,12 +92,12 @@ const StyledActivity = styled.div`
     grid-template-columns: repeat(5, 20%);
   }
 
-  & .text{
+  & .text {
     overflow-x: hidden;
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
-    text-overflow : ellipsis;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -80,6 +106,7 @@ export default function NFT() {
   const [metadata, setMetadata] = useState([]);
   const [rentinfo, setRentinfo] = useState([]);
   const [activity, setactivity] = useState([]);
+
 
   async function searchApi() {
     const metadataurl =
@@ -125,58 +152,39 @@ export default function NFT() {
     searchApi();
   }, []);
 
-  console.log(activity);
-
+  console.log(metadata);
   return (
     <StyledNFT>
       <div className="layout">
-        <div className="gridbox">
+        <div className="flexbox">
           <div className="image-box">
             <img src={metadata.image} alt="Loading..." />
           </div>
-          <div>
-            <p>owner : {metadata.owner}</p>
-            <p>collateral : {rentinfo.collateral_token}</p>
-            <p>collateral_amount : {rentinfo.collateral_amount}</p>
-            <p>rent_fee_per_block : {rentinfo.rent_fee_per_block}</p>
-            <p>max_rent_duration : {rentinfo.maxrent_duration}</p>
-            {rentinfo.renter_address ? (
-              <div>
-                <p>renter_address : {rentinfo.renter_address}</p>
-                <p>rent_duration : {rentinfo.rent_duration}</p>
-                <p>rent_block : {rentinfo.rent_block}</p>
+          <div style={{width : "fill"}}>
+            <div className="nftinfo">
+              <div className="text">
+                {metadata?.name} #{metadata?.token_id}
               </div>
-            ) : (
-              ""
-            )}
-          </div>
-          <div className="text">
-            <p>
-              {metadata?.name} {metadata?.token_id}
-            </p>
-            <p>{metadata?.description}</p>
-          </div>
-          <div className="form">
-            <div>
-              <p>collateral : 1000 KUSDT</p>
-              <p>rent_fee : 1000KUSDT</p>
-              <Input />
+              <a href="">{metadata?.collection_address}</a>
             </div>
+
+            <Contents rentinfo={rentinfo}/>
           </div>
         </div>
         <div>
           <p>Attribute</p>
         </div>
         <StyledProperty>
-          {metadata.property? metadata.property.map((data, index) => (
-            <div className="item" key={index}>
-              <p>{data.trait_type}</p>
-              <p>{data.value}</p>
-            </div>
-          ))
-        :
-        <div>No property</div>
-        }
+          {metadata.property ? (
+            metadata.property.map((data, index) => (
+              <div className="item" key={index}>
+                <p>{data.trait_type}</p>
+                <p>{data.value}</p>
+              </div>
+            ))
+          ) : (
+            <div>No property</div>
+          )}
         </StyledProperty>
         <div>
           <p>Activity</p>
@@ -190,17 +198,19 @@ export default function NFT() {
             <p>Collateral_amount</p>
             <p>Rent_fee</p>
           </div>
-        {activity? activity.map((data, index) => (
-            <div className="item" key={index}>
-              <p className="text">{data.from}</p>
-              <p>{data.event}</p>
-              <p>{data.block}</p>
-              <p>{data.collateral_amount}</p>
-              <p>{data.rent_fee}</p>
-            </div>
-          )) :
-          <div>No transcation before</div>
-          }
+          {activity ? (
+            activity.map((data, index) => (
+              <div className="item" key={index}>
+                <p className="text">{data.from}</p>
+                <p>{data.event}</p>
+                <p>{data.block}</p>
+                <p>{data.collateral_amount}</p>
+                <p>{data.rent_fee}</p>
+              </div>
+            ))
+          ) : (
+            <div>No transcation before</div>
+          )}
         </StyledActivity>
       </div>
     </StyledNFT>
