@@ -53,29 +53,35 @@ const Image = styled.div`
   }
 `;
 const StyledActivity = styled.div`
-  margin: auto;
-  width: 80%;
-  border: 1px solid blue;
+width: 100%;
+color: rgb(255, 255, 255);
+background-color: rgba(43, 45, 55, 0.6);
+border-radius : 15px;
+box-shadow: 5px 5px 5px gray;
 
-  & .item {
-    display: grid;
-    grid-template-columns: repeat(5, 20%);
-  }
+& .item {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  grid-row-gap : 50px;
+  text-align: center;
+  padding : 5px;
+}
 
-  & .text {
-    overflow-x: hidden;
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
-    text-overflow: ellipsis;
-  }
+& .text {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  color : white;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+}
 `;
 
 export default function MyPage() {
   const params = useParams();
   const [metadata, setmetadata] = useState([]);
   const [activity, setActivity] = useState([]);
-  const [isitem, setIsitem] = useState(false);
+  const [isitem, setIsitem] = useState(true);
 
   async function searchApi() {
     const url = process.env.REACT_APP_API_URL + `/user/${params.useraddress}`;
@@ -124,7 +130,7 @@ export default function MyPage() {
           src={metadata.image ? metadata.image : "/avatar.png"}
           alt="Workflow"
         />
-        <p>{metadata?.nickname}</p>
+        <p className="Title">{metadata?.nickname}</p>
       </Image>
       <div className="Toggle">
         <Button onClick={onItem} text={"Items"}></Button>

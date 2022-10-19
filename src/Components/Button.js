@@ -1,60 +1,53 @@
 import styled from "styled-components";
 
 const StyledButton = styled.div`
-html,body{
-    height:100%;
+  button {
+    background-color: rgba(43, 45, 55, 0.6);
+    color: white;
+    border: none;
+    box-shadow: 2px 2px 2px gray;
+    position: relative;
+    height: 100%;
+    font-size: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+    border-radius: 12px;
+
   }
-  body{
-    text-align:center;
+  button:hover {
+    background: #fff;
+    color: #1aab8a;
   }
-  body:before{
-    content:'';
-    height:100%;
-    display:inline-block;
-    vertical-align:middle;
+  button:before,
+  button:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    background: #1aab8a;
+    transition: 400ms ease all;
   }
-  button{
-    background:#1AAB8A;
-    color:#fff;
-    border:none;
-    position:relative;
-    height:60px;
-    font-size:1.6em;
-    padding:0 2em;
-    cursor:pointer;
-    transition:800ms ease all;
-    outline:none;
+  button:after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
   }
-  button:hover{
-    background:#fff;
-    color:#1AAB8A;
+  button:hover:before,
+  button:hover:after {
+    width: 100%;
+    transition: 800ms ease all;
   }
-  button:before,button:after{
-    content:'';
-    position:absolute;
-    top:0;
-    right:0;
-    height:2px;
-    width:0;
-    background: #1AAB8A;
-    transition:400ms ease all;
-  }
-  button:after{
-    right:inherit;
-    top:inherit;
-    left:0;
-    bottom:0;
-  }
-  button:hover:before,button:hover:after{
-    width:100%;
-    transition:800ms ease all;
-  }  
 `;
 
-export default function Button({text, onClick}) {
+export default function Button({ text, onClick }) {
   return (
     <StyledButton>
-      <button className="Button" onClick={onClick}>{text}</button>
+      <button onClick={onClick}>{text}</button>
     </StyledButton>
   );
 }

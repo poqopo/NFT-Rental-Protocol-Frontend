@@ -19,7 +19,9 @@ const Item = styled.div`
   text-align: start;
   font-size: 12px;
   font-weight: 400;
-  border: 1px solid #ff8826;
+  padding : 1px;
+  border-radius : 15px;
+  box-shadow: 5px 5px 5px gray;
 
   & .imagelayout {
     width: 25%;
@@ -28,6 +30,7 @@ const Item = styled.div`
   & .image {
     width: 100%;
     height: auto;
+    border-radius : 15px;
   }
 
   & .text {

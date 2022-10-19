@@ -34,7 +34,8 @@ const StyledCollection = styled.div`
     width : 90%;
   }
   & .description {
-    margin: auto;
+    width : 85%;
+    margin : auto;
     color: black;
     font-size: 14px;
     font-weight: bold;
@@ -43,7 +44,7 @@ const StyledCollection = styled.div`
     line-height: 1.38;
     letter-spacing: normal;
     margin-bottom: 48px;
-    text-align: center;
+    text-align: start;
   }
 `;
 
@@ -76,7 +77,9 @@ export default function Collection() {
         <Background url={metadata.banner ? metadata.banner : "/background.jpg"}/>
       </div>
       <div className="Title">{metadata?.name}</div>
-      <div className="description">{metadata?.description}</div>
+      <div className="description">
+        <div>{metadata?.description}</div>
+      </div>
       <div className="list">
         <Itemlist category={"collection"} subject={'nfts'} detail={params.collectionAddress} />
       </div>

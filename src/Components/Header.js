@@ -13,41 +13,33 @@ const StyledHeader = styled.div`
   opacity: 1;
   backdrop-filter: blur(10px);
   z-index: 1;
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
 
   & .Logo {
-    margin: auto 0;
-    width: 10%;
+    margin: auto;
+    width: 100%;
+    text-align : center;
   }
   & .form {
-    display: block;
-    width: 40%;
-  }
-
-  & .Menu {
-    width: 90%;
-    height: 100%;
-    margin: auto;
-    display: flex;
-    place-content: space-between;
-  }
-
-  & .Input {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width : 80%;
+    height : 44px;
+    margin : auto;
+    display : flex;
   }
 
   & .link {
-    width: 40%;
-    heght: 100%;
     margin: auto 0;
-    display: flex;
-    place-content: space-around;
+    display : grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-content: space-evenly;
+    font-size: 16px;
+    font-weight: 500;
     text-decoration: none;
+    text-align : center;
   }
   a {
-    color: white;
+    color: black;
     padding: 1em 1.5em;
     text-decoration: none;
     text-transform: uppercase;
@@ -61,8 +53,9 @@ const StyledHeader = styled.div`
   }
 
   & .explore {
-    width : 100px;
-    text-align : center;
+    margin : auto;
+    width : 120px;
+  
   }
 `;
 
@@ -73,8 +66,9 @@ const ConnectWallet = styled.button`
   height: 54px;
   border: 0;
   border-radius: 6px;
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 16px;
+  font-weight: 500;
+  text-align : center;
   background-color: transparent;
   &:hover {
     background: #03e9f4;
@@ -84,7 +78,6 @@ const ConnectWallet = styled.button`
       0 0 100px #03e9f4;
     cursor: pointer;
   }
-
 `;
 
 export default function Header() {
@@ -137,22 +130,28 @@ export default function Header() {
   }
   return (
     <StyledHeader>
-      <div className="Menu">
-        <div className="Logo">
-          <p>Logo</p>
-        </div>
-        <div className="form">
-          <Input className="Input" />
-        </div>
-        <div className="link">
-          <Link className="explore" to="/">Explore</Link>
-          <Link className="explore" to="/Kick">Kick</Link>
-          <ConnectWallet onClick={() => connectKaikas()}>
-            {isWalletConnected
-              ? <Link to={`user/${currentAddress}`}>{currentAddress.slice(0, 10) + "..." + currentAddress.slice(-3)}</Link>
-              : "Connect Wallet"}
-          </ConnectWallet>
-        </div>
+      <h3 className="Logo">Logo</h3>
+      <div className="form">
+      <Input />
+      <Button text={"Search!"}/>
+      </div>
+      
+      <div className="link">
+        <Link className="explore" to="/">
+          Explore
+        </Link>
+        <Link className="explore" to="/Kick">
+          Kick
+        </Link>
+        <ConnectWallet onClick={() => connectKaikas()}>
+          {isWalletConnected ? (
+            <Link to={`user/${currentAddress}`}>
+              Mypage
+            </Link>
+          ) : (
+            "Connect Wallet"
+          )}
+        </ConnectWallet>
       </div>
     </StyledHeader>
   );

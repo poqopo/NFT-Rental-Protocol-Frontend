@@ -13,16 +13,20 @@ const StyledList = styled.div`
 `;
 const Item = styled.div`
   margin: auto;
+  padding : 1px;
   text-align: center;
   font-size: 14px;
   font-weight: 400;
-  border: 1px solid #ff8826;
+  border-radius : 15px;
+  box-shadow: 5px 5px 5px gray;
+
 
   & .image {
     width: 100%;
     height: auto;
     max-width: 300px;
     max-height: 300px;
+    border-radius : 15px;
   }
 `;
 

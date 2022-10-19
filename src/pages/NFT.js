@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import Contents from "../Components/Contents";
+import { GrRefresh } from 'react-icons/gr';
+import { AiOutlineHome } from 'react-icons/ai';
+import { BsTwitter } from 'react-icons/bs';
+import { FaDiscord } from 'react-icons/fa';
 
 const StyledNFT = styled.div`
   position: relative;
@@ -20,11 +24,11 @@ const StyledNFT = styled.div`
     width: 80%;
   }
   & .flexbox {
+    display: grid;
+    grid-template-columns: 500px 78px 1fr;
     margin: auto;
     width: 100%;
     height: 500px;
-    display: flex;
-    border: 1px solid blue;
   }
   & .image-box {
     width: 500px;
@@ -33,27 +37,21 @@ const StyledNFT = styled.div`
   img {
     width: 100%;
     height: 100%;
+    border-radius : 15px;
+    box-shadow: 5px 5px 5px gray;
+
+  }
+  & .nftinfo-box {
+    width: 90%;
+    height: 100%;
   }
   & .nftinfo {
-    width: auto;
-    padding-left: 78px;
-    height: 125px;
+    width: 100%;
+    height: 100px;
   }
   & .rentinfo {
-    width : 100%;
-    height: 375px;
-    display: flex;
-    flex-direction: column;
-    place-content: space-around;
-    padding-left: 78px;   
-    font-size: px;
-    font-weight: bold;
-    line-height: 1.2;
-  }
-  & .kickinfo {
-    display : flex;
-    place-content : space-between;
-    height: 125px;
+    width: 100%;
+    height: 400px;
   }
 
   & .text {
@@ -61,11 +59,23 @@ const StyledNFT = styled.div`
     font-weight: bold;
     line-height: 1.2;
   }
-  & .form {
-    padding: 15px;
-    margin-top: 50px;
-    background-color: ivory;
-    width: 90%;
+
+  & .menu {
+    font-size: 24px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: normal;
+  }
+
+
+  & .icons {
+    width : 30%;
+    display : flex;
+    align-items : center;
+    place-content : space-evenly;
+    
   }
 `;
 
@@ -76,26 +86,37 @@ const StyledProperty = styled.div`
   grid-template-columns: repeat(auto-fill, 120px);
 
   & .item {
-    width: 100%;
-    margin: auto;
-    border: 1px solid blue;
-    padding: 3%;
+    text-align: center;
+    border-radius: 12px;
+    padding : 1px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(43, 45, 55, 0.6);
+    height: 100%;
+    word-break: break-word;
   }
+
 `;
 
 const StyledActivity = styled.div`
   width: 100%;
-  border: 1px solid blue;
+  color: rgb(255, 255, 255);
+  background-color: rgba(43, 45, 55, 0.6);
+  border-radius : 15px;
+  box-shadow: 5px 5px 5px gray;
 
   & .item {
     display: grid;
     grid-template-columns: repeat(5, 20%);
+    grid-row-gap : 50px;
+    text-align: center;
+    padding : 5px;
   }
 
   & .text {
     overflow-x: hidden;
     max-width: 100%;
     width: 100%;
+    color : white;
     box-sizing: border-box;
     text-overflow: ellipsis;
   }
@@ -106,7 +127,6 @@ export default function NFT() {
   const [metadata, setMetadata] = useState([]);
   const [rentinfo, setRentinfo] = useState([]);
   const [activity, setactivity] = useState([]);
-
 
   async function searchApi() {
     const metadataurl =
@@ -152,7 +172,7 @@ export default function NFT() {
     searchApi();
   }, []);
 
-  console.log(metadata);
+  console.log(activity);
   return (
     <StyledNFT>
       <div className="layout">
@@ -160,19 +180,31 @@ export default function NFT() {
           <div className="image-box">
             <img src={metadata.image} alt="Loading..." />
           </div>
-          <div style={{width : "fill"}}>
+          <div></div>
+          <div className="nftinfo-box">
             <div className="nftinfo">
-              <div className="text">
-                {metadata?.name} #{metadata?.token_id}
+              <div style={{ display: "flex", placeContent : "space-between"}}>
+                <div>
+                  <div className="text">
+                    {metadata?.name} #{metadata?.token_id}
+                  </div>
+                  <a href="">{metadata?.collection_address}</a>
+                </div>
+                <div className="icons">
+                  <GrRefresh size="24px"/>
+                  <AiOutlineHome size="24px"/>
+                  <BsTwitter size="24px"/>
+                  <FaDiscord size="24px"/>
+                </div>
               </div>
-              <a href="">{metadata?.collection_address}</a>
             </div>
-
-            <Contents rentinfo={rentinfo}/>
+            <div className="rentinfo">
+              <Contents rentinfo={rentinfo} />
+            </div>
           </div>
         </div>
-        <div>
-          <p>Attribute</p>
+        <div style={{margin : "50px auto"}}>
+          <p className="menu">Attribute</p>
         </div>
         <StyledProperty>
           {metadata.property ? (
@@ -186,14 +218,15 @@ export default function NFT() {
             <div>No property</div>
           )}
         </StyledProperty>
-        <div>
-          <p>Activity</p>
+        <div style={{margin : "50px auto"}}>
+          <p className="menu">Activity</p>
         </div>
 
         <StyledActivity>
           <div className="item">
-            <p>From</p>
             <p>Event</p>
+            <p>From</p>
+
             <p>Block</p>
             <p>Collateral_amount</p>
             <p>Rent_fee</p>
@@ -201,8 +234,9 @@ export default function NFT() {
           {activity ? (
             activity.map((data, index) => (
               <div className="item" key={index}>
-                <p className="text">{data.from}</p>
                 <p>{data.event}</p>
+                <p>{data.from}</p>
+
                 <p>{data.block}</p>
                 <p>{data.collateral_amount}</p>
                 <p>{data.rent_fee}</p>
