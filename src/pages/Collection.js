@@ -4,6 +4,7 @@ import Background from "../Components/Background";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Menu from "../Components/Menu";
 
 const StyledCollection = styled.div`
   position: relative;
@@ -81,6 +82,7 @@ export default function Collection() {
         <div>{metadata?.description}</div>
       </div>
       <div className="list">
+        <Menu/>
         <Itemlist category={"collection"} subject={'nfts'} detail={params.collectionAddress} />
       </div>
     </StyledCollection>

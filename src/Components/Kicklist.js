@@ -10,7 +10,7 @@ const StyledList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 500px);
   grid-auto-rows: 120px;
-  grid-gap: 5%;
+  grid-gap: 50px;
   place-content: center;
 `;
 const Item = styled.div`

@@ -1,11 +1,7 @@
-import Itemlist from "../Components/Itemlist";
 import styled from "styled-components";
-import Background from "../Components/Background";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Input from "../Components/Input";
-import Button from "../Components/Button";
 import Contents from "../Components/Contents";
 import { GrRefresh } from 'react-icons/gr';
 import { AiOutlineHome } from 'react-icons/ai';
@@ -29,6 +25,7 @@ const StyledNFT = styled.div`
     margin: auto;
     width: 100%;
     height: 500px;
+    font-weight : 500;
   }
   & .image-box {
     width: 500px;
