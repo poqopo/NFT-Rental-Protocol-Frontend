@@ -25,12 +25,11 @@ const StyledMyPage = styled.div`
     font-weight: bold;
     font-stretch: normal;
     font-style: normal;
-    line-height: 1.38;
     letter-spacing: normal;
     text-align: center;
   }
   & .list {
-    margin: 5% auto;
+    margin: auto;
     width: 90%;
   }
 
@@ -81,6 +80,18 @@ export default function MyPage() {
   const [metadata, setmetadata] = useState([]);
   const [activity, setActivity] = useState([]);
   const [isitem, setIsitem] = useState(true);
+  const viewMenu = [
+    { value: 0, label: "소유중인 NFT 보기" },
+    { value: 1, label: "리스팅한 NFT 보기" },
+    { value: 2, label: "대여한 NFT 보기" },
+  ];
+
+  const sortMenu = [
+    { value: 0, label: "ID 정렬" },
+    { value: 1, label: "최대 대여기간 정렬" },
+    { value: 2, label: "대여료 정렬" },
+  ];
+
 
   async function searchApi() {
     const url = process.env.REACT_APP_API_URL + `/user/${params.useraddress}`;
@@ -107,13 +118,7 @@ export default function MyPage() {
       });
   }
 
-  const onItem = useCallback(() => {
-    setIsitem(true);
-  }, [isitem]);
-
-  const onActivity = useCallback(() => {
-    setIsitem(false);
-  }, [isitem]);
+  const onToggle= () => setIsitem(!isitem)
 
   useEffect(() => {
     searchApi();
@@ -131,10 +136,6 @@ export default function MyPage() {
         />
         <p className="Title">{metadata?.nickname}</p>
       </Image>
-      <div className="Toggle">
-        <Button onClick={onItem} text={"Items"}></Button>
-        <Button onClick={onActivity} text={"Activity"}></Button>
-      </div>
 
       {isitem ? (
         <div className="list">
@@ -142,6 +143,9 @@ export default function MyPage() {
             category={"user"}
             subject={"nfts"}
             detail={params.useraddress}
+            viewMenu={viewMenu}
+            sortMenu={sortMenu}
+            menuVisible={true}
           />
         </div>
       ) : (

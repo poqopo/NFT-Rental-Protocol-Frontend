@@ -9,7 +9,7 @@ import Menu from "../Components/Menu";
 const StyledCollection = styled.div`
   position: relative;
   top: 80px;
-  width : 100%;
+  width: 100%;
   height: 100vh;
 
   & .background {
@@ -31,12 +31,12 @@ const StyledCollection = styled.div`
     text-align: center;
   }
   & .list {
-    margin : auto;
-    width : 90%;
+    margin: auto;
+    width: 90%;
   }
   & .description {
-    width : 85%;
-    margin : auto;
+    width: 85%;
+    margin: auto;
     color: black;
     font-size: 14px;
     font-weight: bold;
@@ -50,36 +50,55 @@ const StyledCollection = styled.div`
 `;
 
 export default function Collection() {
-    const params = useParams()
-    const [metadata, setMetadata] = useState({})
-    async function searchApi() {
-      const url =
-        process.env.REACT_APP_API_URL +
-        `/collection/${params.collectionAddress}`;
-      await axios
-        .get(url)
-        .then(function (response) {
-          setMetadata(response.data);
-          console.log("성공");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
-    useEffect(() => {
-      searchApi();
-    }, []);
+  const params = useParams();
+  const [metadata, setMetadata] = useState({});
+  const viewMenu = [
+    { value: 0, label: "모든 NFT" },
+    { value: 1, label: "리스팅된 NFT" },
+    { value: 2, label: "대여중인 NFT" },
+  ];
+
+  const sortMenu = [
+    { value: 0, label: "ID 정렬" },
+    { value: 1, label: "최대 대여기간 정렬" },
+    { value: 2, label: "대여료 정렬" },
+  ];
+  async function searchApi() {
+    const url =
+      process.env.REACT_APP_API_URL + `/collection/${params.collectionAddress}`;
+    await axios
+      .get(url)
+      .then(function (response) {
+        setMetadata(response.data);
+        console.log("성공");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    searchApi();
+  }, []);
   return (
     <StyledCollection>
       <div className="background">
-        <Background url={metadata.banner ? metadata.banner : "/background.jpg"}/>
+        <Background
+          url={metadata.banner ? metadata.banner : "/background.jpg"}
+        />
       </div>
       <div className="Title">{metadata?.name}</div>
       <div className="description">
         <div>{metadata?.description}</div>
       </div>
       <div className="list">
-        <Itemlist category={"collection"} subject={'nfts'} detail={params.collectionAddress} />
+        <Itemlist
+          category={"collection"}
+          subject={"nfts"}
+          detail={params.collectionAddress}
+          viewMenu={viewMenu}
+          sortMenu={sortMenu}
+          menuVisible={true}
+        />
       </div>
     </StyledCollection>
   );

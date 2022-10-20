@@ -33,6 +33,18 @@ const StyledHome = styled.div`
 `;
 
 export default function Home() {
+  const viewMenu = [
+    { value: 0, label: "모든 NFT" },
+    { value: 1, label: "리스팅된 NFT" },
+    { value: 2, label: "대여중인 NFT" },
+
+  ];
+
+  const sortMenu = [
+    { value: 0, label: "ID 정렬" },
+    { value: 1, label: "최대 대여기간 정렬" },
+    { value: 2, label: "대여료 정렬" },
+  ]
   return (
     <StyledHome>
       <div className="background">
@@ -40,7 +52,7 @@ export default function Home() {
       </div>
       <p className="Title">Collections</p>
       <div className="list">
-        <Itemlist category={"collection"} subject={"collections"}/>
+        <Itemlist category={"collection"} subject={"collections"} menuVisible={false} viewMenu={viewMenu} sortMenu={sortMenu}/>
       </div>
     </StyledHome>
   );

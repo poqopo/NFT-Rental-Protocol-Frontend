@@ -16,7 +16,8 @@ import {
   kickNFT,
 } from "../Utils/Contract";
 import { Link } from "react-router-dom";
-import SelectBox from "./Selectbox";
+import Select from "react-select";
+
 const StyledContents = styled.div`
   width: 100%;
   height: 100%;
@@ -58,6 +59,7 @@ const StyledContents = styled.div`
   & .item {
     display: grid;
     grid-template-columns: 3fr 1fr;
+    grid-gap : 10px;
     place-content: center;
     text-align: center;
     font-size: 16px;
@@ -73,18 +75,21 @@ export default function Contents({ rentinfo }) {
   const [inputfee, setInputfee] = useState(0);
   const [collat, setCollat] = useState("");
   const [decimal, setDecimal] = useState(1);
+  const [selectedModify, setModifyOption] = useState(null);
+  const [selectedCollat, setCollatOption] = useState(null);
+
   const day = 60 * 60 * 24;
   const modifyOption = [
-    { value: undefined, name: "OPTIONS", denominator: 0 },
-    { value: 0, name: "최대 대여 기간", denominator: day },
-    { value: 1, name: "담보 양", denominator: decimal },
-    { value: 2, name: "일당 대여료", denominator: decimal / day },
+    { value: undefined, label: "OPTIONS", denominator: 0 },
+    { value: 0, label: "최대 대여 기간", denominator: day },
+    { value: 1, label: "담보 양", denominator: decimal },
+    { value: 2, label: "일당 대여료", denominator: decimal / day },
   ];
   const collatOption = [
-    { value: undefined, name: "담보 토큰" },
-    { value: 1, name: "KUSDT" },
-    { value: 2, name: "WKLAY" },
-    { value: 3, name: "KUSDC" },
+    { value: undefined, label: "담보 토큰" },
+    { value: 1, label: "KUSDT" },
+    { value: 2, label: "WKLAY" },
+    { value: 3, label: "KUSDC" },
   ];
 
   const currentAddress = window.klaytn.selectedAddress
@@ -107,9 +112,6 @@ export default function Contents({ rentinfo }) {
   const inputChange = (e) => setInputvalue(e.target.value);
   const dayChange = (e) => setInputdays(e.target.value);
   const feeChange = (e) => setInputfee(e.target.value);
-  const collatChange = (e) => {
-    setCollat(e.target.value);
-  };
   return (
     <StyledContents>
       {rentinfo.lender_address ? (
@@ -183,14 +185,16 @@ export default function Contents({ rentinfo }) {
                       {Math.round(rentinfo.collateral_amount / 10 ** decimal)}{" "}
                       token
                     </p>
-                    <p>대여료 : {inputvalue} KUSDT</p>
+                    <p>
+                      대여료 : {inputvalue} {name}
+                    </p>
                     <p>
                       총 대여료 :{" "}
-                      {inputvalue +
+                      {parseInt(inputvalue) +
                         Math.round(
                           rentinfo.collateral_amount / 10 ** decimal
                         )}{" "}
-                      KUSDT
+                      {name}
                     </p>
                     <div
                       style={{
@@ -236,7 +240,11 @@ export default function Contents({ rentinfo }) {
                       gridGap: "10px",
                     }}
                   >
-                    <SelectBox options={modifyOption} />
+                    <Select
+                      defaultValue={selectedModify}
+                      onChange={setModifyOption}
+                      options={modifyOption}
+                    />
                     <Input
                       className="Input"
                       text={"Modify"}
@@ -280,7 +288,11 @@ export default function Contents({ rentinfo }) {
                 text={"담보로 잡을 토큰의 양"}
                 onChange={inputChange}
               />{" "}
-              <SelectBox options={collatOption} handlechange={collatChange} />
+              <Select
+                defaultValue={selectedCollat}
+                onChange={setCollatOption}
+                options={collatOption}
+              />
             </div>
             <div className="item">
               <Input
@@ -296,7 +308,7 @@ export default function Contents({ rentinfo }) {
                 text={"일당 대여료"}
                 onChange={feeChange}
               />
-              <p>{collat ? collatOption[collat].name : "tokens"}</p>
+              <p>{selectedCollat? selectedCollat.label : "tokens"}</p>
             </div>
             <Button
               style={{}}
@@ -305,7 +317,7 @@ export default function Contents({ rentinfo }) {
                 listNFT(
                   rentinfo.collection_address,
                   rentinfo.token_id,
-                  collatOption[collat].address,
+                  selectedCollat.address,
                   inputdays,
                   inputvalue,
                   inputfee

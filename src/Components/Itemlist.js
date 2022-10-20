@@ -30,8 +30,10 @@ const Item = styled.div`
   }
 `;
 
-export default function Itemlist({ category, subject, detail }) {
+export default function Itemlist({ category, subject, detail, viewMenu, sortMenu, menuVisible}) {
   const [itemlist, setItemlist] = useState([]);
+  const [selctedViewMenu, setViewMenu] =useState();
+  const [selctedSortMenu, setSortMenu] =useState();
   // 통신 메서드
   async function searchApi() {
     const url =
@@ -52,17 +54,10 @@ export default function Itemlist({ category, subject, detail }) {
     searchApi();
   }, []);
 
-  const menu = [
-    {text : "Listed", activetext : "Rented"},
-    {text : "Listed", activetext : "Rented"},
-    {text : "Listed", activetext : "Rented"},
-    {text : "Listed", activetext : "Rented"},
-    {text : "Listed", activetext : "Rented"}
-  ]
 
   return (
     <div>
-      <Menu props={menu}/>
+      <Menu viewMenu={viewMenu} viewMenuChange={setViewMenu} sortMenu={sortMenu} sortMenuChange={setSortMenu} selctedViewMenu={selctedViewMenu} selectedSortmenu={selctedSortMenu} menuVisible={menuVisible}/>
       <StyledList>
         {itemlist?.map((data, index) => (
           <div key={index}>
