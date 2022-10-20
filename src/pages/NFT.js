@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Contents from "../Components/Contents";
-import { GrRefresh } from 'react-icons/gr';
-import { AiOutlineHome } from 'react-icons/ai';
-import { BsTwitter } from 'react-icons/bs';
-import { FaDiscord } from 'react-icons/fa';
+import { GrRefresh } from "react-icons/gr";
+import { AiOutlineHome } from "react-icons/ai";
+import { BsTwitter } from "react-icons/bs";
+import { FaDiscord } from "react-icons/fa";
 
 const StyledNFT = styled.div`
   position: relative;
@@ -25,7 +25,7 @@ const StyledNFT = styled.div`
     margin: auto;
     width: 100%;
     height: 500px;
-    font-weight : 500;
+    font-weight: 500;
   }
   & .image-box {
     width: 500px;
@@ -34,9 +34,8 @@ const StyledNFT = styled.div`
   img {
     width: 100%;
     height: 100%;
-    border-radius : 15px;
+    border-radius: 15px;
     box-shadow: 5px 5px 5px gray;
-
   }
   & .nftinfo-box {
     width: 90%;
@@ -66,13 +65,15 @@ const StyledNFT = styled.div`
     letter-spacing: normal;
   }
 
-
   & .icons {
-    width : 30%;
-    display : flex;
-    align-items : center;
-    place-content : space-evenly;
-    
+    width: 30%;
+    display: flex;
+    align-items: center;
+    place-content: space-evenly;
+  }
+  a {
+    text-decoration : none;
+    color : black;
   }
 `;
 
@@ -85,35 +86,34 @@ const StyledProperty = styled.div`
   & .item {
     text-align: center;
     border-radius: 12px;
-    padding : 1px;
+    padding: 1px;
     color: rgb(255, 255, 255);
     background-color: rgba(43, 45, 55, 0.6);
     height: 100%;
     word-break: break-word;
   }
-
 `;
 
 const StyledActivity = styled.div`
   width: 100%;
   color: rgb(255, 255, 255);
   background-color: rgba(43, 45, 55, 0.6);
-  border-radius : 15px;
+  border-radius: 15px;
   box-shadow: 5px 5px 5px gray;
 
   & .item {
     display: grid;
     grid-template-columns: repeat(5, 20%);
-    grid-row-gap : 50px;
+    grid-row-gap: 50px;
     text-align: center;
-    padding : 5px;
+    padding: 5px;
   }
 
   & .text {
     overflow-x: hidden;
     max-width: 100%;
     width: 100%;
-    color : white;
+    color: white;
     box-sizing: border-box;
     text-overflow: ellipsis;
   }
@@ -123,7 +123,7 @@ export default function NFT() {
   const params = useParams();
   const [metadata, setMetadata] = useState([]);
   const [rentinfo, setRentinfo] = useState([]);
-  const [activity, setactivity] = useState([]);
+  const [activity, setActivity] = useState([]);
 
   async function searchApi() {
     const metadataurl =
@@ -158,7 +158,7 @@ export default function NFT() {
     await axios
       .get(activityurl)
       .then(function (response) {
-        setactivity(response.data);
+        setActivity(response.data);
         console.log("성공");
       })
       .catch(function (error) {
@@ -168,6 +168,7 @@ export default function NFT() {
   useEffect(() => {
     searchApi();
   }, []);
+
   return (
     <StyledNFT>
       <div className="layout">
@@ -178,27 +179,37 @@ export default function NFT() {
           <div></div>
           <div className="nftinfo-box">
             <div className="nftinfo">
-              <div style={{ display: "flex", placeContent : "space-between"}}>
+              <div style={{ display: "flex", placeContent: "space-between" }}>
                 <div>
                   <div className="text">
-                    {metadata?.name}
+                    {metadata?.name} #{metadata.token_id}
                   </div>
-                  <a href="">{metadata?.collection_address}</a>
+                  <a
+                    href={`https://baobab.scope.klaytn.com/account/${metadata?.collection_address}?tabId=txList`}
+                  >
+                    {metadata?.collection_address}
+                  </a>
                 </div>
                 <div className="icons">
-                  <GrRefresh size="24px"/>
-                  <AiOutlineHome size="24px"/>
-                  <BsTwitter size="24px"/>
-                  <FaDiscord size="24px"/>
+                  <GrRefresh size="24px" />
+                  <a href={metadata?.website}>
+                    <AiOutlineHome size="24px" />
+                  </a>
+                  <a href={metadata?.twitter}>
+                    <BsTwitter size="24px" />
+                  </a>
+                  <a href={metadata?.discord}>
+                    <FaDiscord size="24px" />
+                  </a>
                 </div>
               </div>
             </div>
             <div className="rentinfo">
-              <Contents rentinfo={[rentinfo]} />
+              <Contents rentinfo={rentinfo} />
             </div>
           </div>
         </div>
-        <div style={{margin : "50px auto"}}>
+        <div style={{ margin: "50px auto" }}>
           <p className="menu">Attribute</p>
         </div>
         <StyledProperty>
@@ -213,7 +224,7 @@ export default function NFT() {
             <div>No property</div>
           )}
         </StyledProperty>
-        <div style={{margin : "50px auto"}}>
+        <div style={{ margin: "50px auto" }}>
           <p className="menu">Activity</p>
         </div>
 

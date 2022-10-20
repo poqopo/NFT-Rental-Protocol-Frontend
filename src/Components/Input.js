@@ -17,10 +17,10 @@ const StyledInput = styled.div`
 
 `;
 
-export default function Input({ text, onClick }) {
+export default function Input({ text, onChange }) {
   return (
     <StyledInput>
-      <input className="input" type="text" name="" required="" />
+      <input className="input" type="text" placeholder={text} onChange={onChange} />
     </StyledInput>
   );
 }

@@ -75,7 +75,7 @@ export default function Itemlist({ category, subject, detail }) {
                 <img className="image" src={data.image} alt="loading..." />
               </Link>
               <h3>
-                Name : {data.name}
+                Name : {data.name} {data.token_id ? "#"+data.token_id : ""}
               </h3>
             </Item>
           </div>
