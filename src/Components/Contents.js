@@ -80,13 +80,12 @@ export default function Contents({ rentinfo }) {
 
   const day = 60 * 60 * 24;
   const modifyOption = [
-    { value: undefined, label: "OPTIONS", denominator: 0 },
-    { value: 0, label: "최대 대여 기간", denominator: day },
-    { value: 1, label: "담보 양", denominator: decimal },
-    { value: 2, label: "일당 대여료", denominator: decimal / day },
+    { value: 1, label: "최대 대여 기간", denominator: day },
+    { value: 2, label: "담보 양", denominator: decimal },
+    { value: 3, label: "일당 대여료", denominator: decimal / day },
   ];
   const collatOption = [
-    { value: undefined, label: "담보 토큰" },
+    { value: 0, label: "담보 토큰" },
     { value: 1, label: "KUSDT" },
     { value: 2, label: "WKLAY" },
     { value: 3, label: "KUSDC" },
@@ -235,19 +234,22 @@ export default function Contents({ rentinfo }) {
                   <div
                     style={{
                       width: "80%",
+                      height : "",
                       display: "grid",
                       gridTemplateColumns: "1fr 2fr 1fr",
                       gridGap: "10px",
+                      
                     }}
                   >
                     <Select
+                      styles={{menuPortal :base => ({...base, zIndex : 9999 })}}
                       defaultValue={selectedModify}
                       onChange={setModifyOption}
                       options={modifyOption}
                     />
                     <Input
                       className="Input"
-                      text={"Modify"}
+                      text={"Value"}
                       onChange={inputChange}
                     />
                     <Button
