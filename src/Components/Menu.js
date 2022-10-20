@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Button from "./Button";
 
 const StyledMenu = styled.div`
     width : 90%;
@@ -21,14 +22,12 @@ const StyledMenu = styled.div`
 `
 
 
-export default function Menu() {
+export default function Menu(props) {
     return (
         <StyledMenu>
-            <div className="item">리스팅/대여</div>
-            <div className="item">ID 순서정렬</div>
-            <div className="item">담보금 정렬</div>
-            <div className="item">대여료 정렬</div>
-            <div className="item">최대 대여 기간 정렬</div>
+            {props.menu?.map((data, index) => {
+                <Button className="item" text={data.text} onClick={props.onClick1}/>
+            })}
         </StyledMenu>
     )
 

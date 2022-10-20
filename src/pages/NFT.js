@@ -168,8 +168,6 @@ export default function NFT() {
   useEffect(() => {
     searchApi();
   }, []);
-
-  console.log(activity);
   return (
     <StyledNFT>
       <div className="layout">
@@ -183,7 +181,7 @@ export default function NFT() {
               <div style={{ display: "flex", placeContent : "space-between"}}>
                 <div>
                   <div className="text">
-                    {metadata?.name} #{metadata?.token_id}
+                    {metadata?.name}
                   </div>
                   <a href="">{metadata?.collection_address}</a>
                 </div>
@@ -196,7 +194,7 @@ export default function NFT() {
               </div>
             </div>
             <div className="rentinfo">
-              <Contents rentinfo={rentinfo} />
+              <Contents rentinfo={[rentinfo]} />
             </div>
           </div>
         </div>

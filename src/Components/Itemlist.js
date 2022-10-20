@@ -52,24 +52,35 @@ export default function Itemlist({ category, subject, detail }) {
     searchApi();
   }, []);
 
+  const menu = [
+    {text : "Listed", activetext : "Rented"},
+    {text : "Listed", activetext : "Rented"},
+    {text : "Listed", activetext : "Rented"},
+    {text : "Listed", activetext : "Rented"},
+    {text : "Listed", activetext : "Rented"}
+  ]
+
   return (
-    <StyledList>
-      {itemlist?.map((data, index) => (
-        <div key={index}>
-          <Item>
-            <Link
-              to={`/${data.collection_address}/${
-                data.token_id ? data.token_id : ""
-              }`}
-            >
-              <img className="image" src={data.image} alt="loading..." />
-            </Link>
-            <h3>
-              Name : {data.name} {data.token_id ? data.token_id : ""}
-            </h3>
-          </Item>
-        </div>
-      ))}
-    </StyledList>
+    <div>
+      <Menu props={menu}/>
+      <StyledList>
+        {itemlist?.map((data, index) => (
+          <div key={index}>
+            <Item>
+              <Link
+                to={`/${data.collection_address}/${
+                  data.token_id ? data.token_id : ""
+                }`}
+              >
+                <img className="image" src={data.image} alt="loading..." />
+              </Link>
+              <h3>
+                Name : {data.name}
+              </h3>
+            </Item>
+          </div>
+        ))}
+      </StyledList>
+    </div>
   );
 }

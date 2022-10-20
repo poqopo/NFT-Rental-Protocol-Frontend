@@ -69,9 +69,6 @@ export default function Collection() {
     useEffect(() => {
       searchApi();
     }, []);
-
-    console.log(metadata)
-    
   return (
     <StyledCollection>
       <div className="background">
@@ -82,7 +79,6 @@ export default function Collection() {
         <div>{metadata?.description}</div>
       </div>
       <div className="list">
-        <Menu/>
         <Itemlist category={"collection"} subject={'nfts'} detail={params.collectionAddress} />
       </div>
     </StyledCollection>

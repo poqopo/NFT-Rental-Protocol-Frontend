@@ -30,6 +30,10 @@
       white-space: nowrap;
       overflow: hidden;
     }
+    a {
+      color : black;
+      text-decoration : none;
+    }
   `;
 
   export default function Contents({ rentinfo }) {
@@ -41,8 +45,8 @@
       <StyledContents>
         <div className="info">
           <h3>대여 정보</h3>
-          <p>소유자 : {rentinfo.lender_address}</p>
-          <p>담보 : {rentinfo.collateral_amount} token</p>
+          <p href="/user">소유자 : {rentinfo.lender_address}</p>
+          <p href="/Home">담보 : {rentinfo.collateral_amount} token</p>
           <p>최대 대여 기간 : {rentinfo.maxrent_duration} days</p>
           <p>대여료 : {rentinfo.rent_fee_per_block} token per 블록</p>
         </div>

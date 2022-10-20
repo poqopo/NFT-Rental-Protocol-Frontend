@@ -27,7 +27,6 @@ const StyledMyPage = styled.div`
     font-style: normal;
     line-height: 1.38;
     letter-spacing: normal;
-    margin-bottom: 48px;
     text-align: center;
   }
   & .list {
