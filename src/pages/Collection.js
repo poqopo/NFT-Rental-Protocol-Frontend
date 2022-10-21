@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Menu from "../Components/Menu";
+import { useQuery } from "react-query";
 
 const StyledCollection = styled.div`
   position: relative;
@@ -53,32 +54,38 @@ export default function Collection() {
   const params = useParams();
   const [metadata, setMetadata] = useState({});
   const viewMenu = [
-    { value: 0, label: "모든 NFT" },
-    { value: 1, label: "리스팅된 NFT" },
-    { value: 2, label: "대여중인 NFT" },
+    { value: undefined, label: "모든 NFT" },
+    { value: "listed", label: "리스팅된 NFT" },
+    { value: "rented", label: "대여중인 NFT" },
   ];
 
   const sortMenu = [
-    { value: 0, label: "ID 정렬" },
-    { value: 1, label: "최대 대여기간 정렬" },
-    { value: 2, label: "대여료 정렬" },
+    { value: "token_id", label: "ID 정렬" },
+    { value: "maxrent_duration", label: "최대 대여기간 정렬" },
+    { value: "rent_fee_per_block", label: "대여료 정렬" },
   ];
-  async function searchApi() {
+
+  async function fetchNFTlist() {
     const url =
-      process.env.REACT_APP_API_URL + `/collection/${params.collectionAddress}`;
-    await axios
-      .get(url)
-      .then(function (response) {
-        setMetadata(response.data);
-        console.log("성공");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    process.env.REACT_APP_API_URL + `/collection/${params.collectionAddress}`;
+    return await (
+      await axios.get(url)
+    ).data;
   }
-  useEffect(() => {
-    searchApi();
-  }, []);
+
+  useQuery("nftlist", fetchNFTlist, {
+    refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
+    retry: 0, // 실패시 재호출 몇번 할지
+    onSuccess: data => {
+      setMetadata(data)
+    },
+    onError: e => {
+      // 실패시 호출 (401, 404 같은 error가 아니라 정말 api 호출이 실패한 경우만 호출됩니다.)
+      // 강제로 에러 발생시키려면 api단에서 throw Error 날립니다. (참조: https://react-query.tanstack.com/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default)
+      console.log(e.message);
+    }
+  });
+
   return (
     <StyledCollection>
       <div className="background">

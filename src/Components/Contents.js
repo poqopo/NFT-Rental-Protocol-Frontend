@@ -40,7 +40,6 @@ const StyledContents = styled.div`
   & .info {
     font-size: 16px;
     font-weight: 500;
-    line-height: 1.5;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -59,7 +58,7 @@ const StyledContents = styled.div`
   & .item {
     display: grid;
     grid-template-columns: 3fr 1fr;
-    grid-gap : 10px;
+    grid-gap: 10px;
     place-content: center;
     text-align: center;
     font-size: 16px;
@@ -67,7 +66,7 @@ const StyledContents = styled.div`
   }
 `;
 
-export default function Contents({ rentinfo }) {
+export default function Contents({ rentinfo, owner }) {
   const [active, setIsactive] = useState(false);
   const [name, setName] = useState("");
   const [inputvalue, setInputvalue] = useState(0);
@@ -234,15 +233,14 @@ export default function Contents({ rentinfo }) {
                   <div
                     style={{
                       width: "80%",
-                      height : "",
+                      height: "200px",
                       display: "grid",
                       gridTemplateColumns: "1fr 2fr 1fr",
                       gridGap: "10px",
-                      
+                      placeContent : "start"
                     }}
                   >
                     <Select
-                      styles={{menuPortal :base => ({...base, zIndex : 9999 })}}
                       defaultValue={selectedModify}
                       onChange={setModifyOption}
                       options={modifyOption}
@@ -278,9 +276,9 @@ export default function Contents({ rentinfo }) {
             </div>
           </div>
         </div>
-      ) : (
+      ) : owner === currentAddress ? (
         <div>
-          <div className="info">
+                    <div className="info">
             <h3>아래 빈칸을 채운 후 List버튼을 눌러 NFT를 리스팅 하세요!</h3>
           </div>
           <div className="list">
@@ -310,7 +308,7 @@ export default function Contents({ rentinfo }) {
                 text={"일당 대여료"}
                 onChange={feeChange}
               />
-              <p>{selectedCollat? selectedCollat.label : "tokens"}</p>
+              <p>{selectedCollat ? selectedCollat.label : "tokens"}</p>
             </div>
             <Button
               style={{}}
@@ -327,6 +325,11 @@ export default function Contents({ rentinfo }) {
               }
             ></Button>
           </div>
+        </div>
+      ) : (
+        <div className="info">
+          <h3>아직 리스팅 되지 않은 NFT입니다.</h3>
+          <h3>조금만 기다려 주세요</h3>
         </div>
       )}
     </StyledContents>

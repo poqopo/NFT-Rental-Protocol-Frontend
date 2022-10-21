@@ -5,6 +5,7 @@ import Button from "../Components/Button";
 import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+import { useQuery } from "react-query";
 
 const StyledMyPage = styled.div`
   position: relative;
@@ -77,52 +78,44 @@ box-shadow: 5px 5px 5px gray;
 
 export default function MyPage() {
   const params = useParams();
-  const [metadata, setmetadata] = useState([]);
+  const [metadata, setMetadata] = useState([]);
   const [activity, setActivity] = useState([]);
   const [isitem, setIsitem] = useState(true);
   const viewMenu = [
-    { value: 0, label: "소유중인 NFT 보기" },
-    { value: 1, label: "리스팅한 NFT 보기" },
-    { value: 2, label: "대여한 NFT 보기" },
+    { value: "owner", label: "소유중인 NFT 보기" },
+    { value: "lender_address", label: "리스팅한 NFT 보기" },
+    { value: "renter_address", label: "대여한 NFT 보기" },
   ];
 
   const sortMenu = [
-    { value: 0, label: "ID 정렬" },
-    { value: 1, label: "최대 대여기간 정렬" },
-    { value: 2, label: "대여료 정렬" },
+    { value: "token_id", label: "ID 정렬" },
+    { value: "maxrent_duration", label: "최대 대여기간 정렬" },
+    { value: "rent_fee_per_block", label: "대여료 정렬" },
   ];
 
-
-  async function searchApi() {
-    const url = process.env.REACT_APP_API_URL + `/user/${params.useraddress}`;
-    await axios
-      .get(url)
-      .then(function (response) {
-        setmetadata(response.data);
-        console.log("성공");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
+  async function fetchMypage() {
+    const metadataurl =
+    process.env.REACT_APP_API_URL + `/user/${params.useraddress}`;
+    const metadata = (await axios.get(metadataurl)).data
     const activityurl =
-      process.env.REACT_APP_API_URL + `/user/activity/${params.useraddress}`;
-    await axios
-      .get(activityurl)
-      .then(function (response) {
-        setActivity(response.data);
-        console.log("성공");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    process.env.REACT_APP_API_URL + `/user/activity/${params.useraddress}`;
+    const activity = (await axios.get(activityurl)).data
+    return {metadata, activity}
   }
 
-  const onToggle= () => setIsitem(!isitem)
-
-  useEffect(() => {
-    searchApi();
-  }, []);
+  useQuery("Mypage", fetchMypage, {
+    refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
+    retry: 0, // 실패시 재호출 몇번 할지
+    onSuccess: data => {
+      setMetadata(data.metadata)
+      setActivity(data.activity)
+    },
+    onError: e => {
+      // 실패시 호출 (401, 404 같은 error가 아니라 정말 api 호출이 실패한 경우만 호출됩니다.)
+      // 강제로 에러 발생시키려면 api단에서 throw Error 날립니다. (참조: https://react-query.tanstack.com/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default)
+      console.log(e.message);
+    }
+  });
   return (
     <StyledMyPage>
       <div className="background">

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Select from "react-select";
-import Button from "./Button";
 
 const StyledMenu = styled.div`
   width: 90%;
