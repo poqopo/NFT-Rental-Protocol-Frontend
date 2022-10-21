@@ -137,17 +137,17 @@ export default function Header() {
       </div>
       
       <div className="link">
-        <Link className="explore" to="/">
+        <a className="explore" href="/">
           Explore
-        </Link>
-        <Link className="explore" to="/Kick">
+        </a>
+        <a className="explore" href="/Kick">
           Kick
-        </Link>
+        </a>
         <ConnectWallet onClick={() => connectKaikas()}>
           {isWalletConnected ? (
-            <Link to={`user/${currentAddress}`}>
+            <a href={`/user/${currentAddress}`}>
               Mypage
-            </Link>
+            </a>
           ) : (
             "Connect Wallet"
           )}

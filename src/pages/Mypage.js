@@ -82,6 +82,10 @@ export default function MyPage() {
   const [metadata, setMetadata] = useState([]);
   const [activity, setActivity] = useState([]);
   const [isitem, setIsitem] = useState(true);
+  const currentAddress = (
+    window.klaytn ? window.klaytn.selectedAddress : undefined
+  );
+
   const viewMenu = [
     { value: "owner", label: "소유중인 NFT 보기" },
     { value: "lender_address", label: "리스팅한 NFT 보기" },
@@ -128,9 +132,20 @@ export default function MyPage() {
           src={metadata.image ? metadata.image : "/avatar.png"}
           alt="Workflow"
         />
-        <div style={{ display: "flex", margin: "auto", width :"fit-content", paddingLeft : "30px" }}>
+        <div
+          style={{
+            display: "flex",
+            margin: "auto",
+            width: "fit-content",
+            paddingLeft: "30px",
+          }}
+        >
           <div className="Title">{metadata?.nickname}</div>
-          <EditProfile />
+          {currentAddress === params.useraddress ? (
+            <EditProfile />
+          ) : (
+            <div></div>
+          )}
         </div>
       </Image>
 

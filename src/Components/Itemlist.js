@@ -56,13 +56,15 @@ export default function Itemlist({
   const [itemlist, setItemlist] = useState([]);
   const [selectedViewMenu, setViewMenu] = useState();
   const [selectedSortMenu, setSortMenu] = useState();
+  const [page, setPage] = useState(1);
 
   async function fetchItemlist( type, subtype ) {
     const url =
       process.env.REACT_APP_API_URL +
-      `/${category}/${subject}/${detail ? detail : ""}${
+      `/${category}/${subject}${detail ? `/${detail}` : ""}${
         type ? `/view/${type}` : ""
-      }${subtype ? `/sort/${subtype}` : ""}`;
+      }${subtype ? `/sort/${subtype}` : ""}?page=${page}&size=20`;
+      console.log(url)
     return await (
       await axios.get(url)
     ).data;
@@ -82,6 +84,38 @@ export default function Itemlist({
       },
     }
   );
+
+  const fetchMoreInstaFeeds = async () => {
+    const fetchedData = await fetchItemlist(selectedViewMenu?.value, selectedSortMenu?.value)
+    const mergedData = itemlist.concat(...fetchedData);
+    setItemlist(mergedData);
+  };
+
+  const handleScroll = () => {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const scrollTop = document.documentElement.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight) {
+      // 페이지 끝에 도달하면 추가 데이터를 받아온다
+      fetchMoreInstaFeeds();
+      setPage(() => page + 1)
+    }
+   };
+  
+  useEffect(() => {
+    // scroll event listener 등록
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      // scroll event listener 해제
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
+
+  useEffect(() => {
+    setPage(1)
+  }, [selectedViewMenu, selectedSortMenu])
+
+
   return (
     <div>
       <Menu
