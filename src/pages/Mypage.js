@@ -82,9 +82,9 @@ export default function MyPage() {
   const [metadata, setMetadata] = useState([]);
   const [activity, setActivity] = useState([]);
   const [isitem, setIsitem] = useState(true);
-  const currentAddress = (
-    window.klaytn ? window.klaytn.selectedAddress : undefined
-  );
+  const currentAddress = window.klaytn
+    ? window.klaytn.selectedAddress
+    : undefined;
 
   const viewMenu = [
     { value: "owner", label: "소유중인 NFT 보기" },
@@ -93,9 +93,12 @@ export default function MyPage() {
   ];
 
   const sortMenu = [
-    { value: "token_id", label: "ID 정렬" },
-    { value: "maxrent_duration", label: "최대 대여기간 정렬" },
-    { value: "rent_fee_per_block", label: "대여료 정렬" },
+    { value: "ORDER BY nft.token_id", label: "ID 정렬" },
+    {
+      value: "ORDER BY rentinfo.maxrent_duration",
+      label: "최대 대여기간 정렬",
+    },
+    { value: "ORDER BY rentinfo.rent_fee_per_block", label: "대여료 정렬" },
   ];
 
   async function fetchMypage() {
@@ -152,9 +155,9 @@ export default function MyPage() {
       {isitem ? (
         <div className="list">
           <Itemlist
+            searchText={"컬렉션 이름으로 검색"}
             category={"user"}
-            subject={"nfts"}
-            detail={params.useraddress}
+            subject={`nfts/${params.useraddress}`}
             viewMenu={viewMenu}
             sortMenu={sortMenu}
             menuVisible={true}

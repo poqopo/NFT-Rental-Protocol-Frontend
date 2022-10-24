@@ -48,7 +48,7 @@ export default function Home() {
   return (
     <StyledHome>
       <div className="background">
-        <Background url={'/background.jpg'}/>
+        <Background url={'https://i.seadn.io/gae/2yxEzSzTzCzRwhi9HE5vZMI-2seqe0koChnBkuTBZ4q-N8O5whASxH0U2Y92ISrcc_wBqYR8usrFSoJ0QnRvKg8fM1UAyf4l3ArULQ?auto=format&w=1920'}/>
       </div>
       <p className="Title">Collections</p>
       <div className="list">

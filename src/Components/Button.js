@@ -18,26 +18,8 @@ const StyledButton = styled.div`
   }
   button:hover {
     background: #fff;
-    color: #1aab8a;
+    color: rgba(43, 45, 55, 0.6);
   }
-  button:before,
-  button:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 2px;
-    width: 0;
-    background: #1aab8a;
-    transition: 400ms ease all;
-  }
-  button:after {
-    right: inherit;
-    top: inherit;
-    left: 0;
-    bottom: 0;
-  }
-  button:hover:before,
   button:hover:after {
     width: 100%;
     transition: 800ms ease all;

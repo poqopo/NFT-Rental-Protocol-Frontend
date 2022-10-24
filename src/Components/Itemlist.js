@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import Menu from "./Menu";
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 const StyledList = styled.div`
   margin: auto;
@@ -12,6 +12,11 @@ const StyledList = styled.div`
   grid-template-columns: repeat(auto-fill, 260px);
   grid-gap: 50px;
   place-content: center;
+  animation: fadeIn 1s;
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
 `;
 const Item = styled.div`
   margin: auto;
@@ -26,7 +31,7 @@ const Item = styled.div`
   -moz-transform: scale(1);
   -ms-transform: scale(1);
   -o-transform: scale(1);
-  transition: all 0.3s ease-in-out; 
+  transition: all 0.3s ease-in-out;
 
   & .image {
     width: 100%;
@@ -34,7 +39,6 @@ const Item = styled.div`
     max-width: 300px;
     max-height: 300px;
     border-radius: 15px;
-
   }
   &:hover {
     transform: scale(1.1);
@@ -52,74 +56,55 @@ export default function Itemlist({
   viewMenu,
   sortMenu,
   menuVisible,
+  searchText
 }) {
-  const [itemlist, setItemlist] = useState([]);
   const [selectedViewMenu, setViewMenu] = useState();
   const [selectedSortMenu, setSortMenu] = useState();
-  const [page, setPage] = useState(1);
 
-  async function fetchItemlist( type, subtype ) {
-    const url =
-      process.env.REACT_APP_API_URL +
-      `/${category}/${subject}${detail ? `/${detail}` : ""}${
-        type ? `/view/${type}` : ""
-      }${subtype ? `/sort/${subtype}` : ""}?page=${page}&size=20`;
-      console.log(url)
-    return await (
-      await axios.get(url)
-    ).data;
-  }
-
-  useQuery(
-    ["itemlist", selectedViewMenu? `/${selectedViewMenu.value}`: "", selectedSortMenu? `/${selectedSortMenu.value}` : "" ],
-     () => fetchItemlist(selectedViewMenu?.value, selectedSortMenu?.value),
+  const { data, fetchNextPage } = useInfiniteQuery(
+    [
+      "itemlist",
+      selectedViewMenu ? `/${selectedViewMenu.value}` : "",
+      selectedSortMenu ? `/${selectedSortMenu.value}` : "",
+    ],
+    ({ pageParam = 1 }) =>
+      axios.get(
+        process.env.REACT_APP_API_URL +
+          `/${category}/${subject}${detail ? `/${detail}` : ""}?view=${
+            selectedViewMenu ? selectedViewMenu.value : ""
+          }&sort=${
+            selectedSortMenu ? selectedSortMenu.value : ""
+          }&page=${pageParam}&size=20`
+      ),
     {
-      refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-      retry: 0, // 실패시 재호출 몇번 할지
-      onSuccess: (data) => {
-        setItemlist(data);
-      },
-      onError: (e) => {
-        console.log(e.message);
+      getNextPageParam: (lastPage, allPages) => {
+        return allPages.length + 1;
       },
     }
   );
 
-  const fetchMoreInstaFeeds = async () => {
-    const fetchedData = await fetchItemlist(selectedViewMenu?.value, selectedSortMenu?.value)
-    const mergedData = itemlist.concat(...fetchedData);
-    setItemlist(mergedData);
+  const observeRef = useRef();
+  const ref = useRef(null);
+  const intersectionObserver = (entries, io) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        io.unobserve(entry.target);
+        fetchNextPage();
+      }
+    });
   };
-
-  const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight;
-    const scrollTop = document.documentElement.scrollTop;
-    const clientHeight = document.documentElement.clientHeight;
-    if (scrollTop + clientHeight >= scrollHeight) {
-      // 페이지 끝에 도달하면 추가 데이터를 받아온다
-      setPage(() => page + 1)
-      console.log(page)
-      fetchMoreInstaFeeds();
+  useEffect(() => {
+    if (observeRef.current) {
+      observeRef.current.disconnect();
     }
-   };
-  
-  useEffect(() => {
-    // scroll event listener 등록
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      // scroll event listener 해제
-      window.removeEventListener("scroll", handleScroll);
-    };
-  });
-
-  useEffect(() => {
-    setPage(1)
-  }, [selectedViewMenu, selectedSortMenu])
-
+    observeRef.current = new IntersectionObserver(intersectionObserver);
+    ref.current && observeRef.current.observe(ref.current);
+  }, [data]);
 
   return (
     <div>
       <Menu
+        text={searchText}
         viewMenu={viewMenu}
         onViewMenuChange={setViewMenu}
         sortMenu={sortMenu}
@@ -129,22 +114,36 @@ export default function Itemlist({
         menuVisible={menuVisible}
       />
       <StyledList>
-        {itemlist?.map((data, index) => (
-          <div key={index}>
-            <Item>
-              <Link
-                to={`/${data.collection_address}/${
-                  data.token_id ? data.token_id : ""
-                }`}
+        {data?.pages.map((page, pageIndex) => {
+          const list = page.data;
+          return list.map((nft, index) => {
+            return (
+              <div
+                key={index}
+                ref={
+                  list.length * pageIndex + index ===
+                  data.pages.length * list.length - 1
+                    ? ref
+                    : null
+                }
               >
-                <img className="image" src={data.image} alt="loading..." />
-              </Link>
-              <h3>
-                Name : {data.name} {data.token_id ? "#" + data.token_id : ""}
-              </h3>
-            </Item>
-          </div>
-        ))}
+                
+                <Item>
+                  <Link
+                    to={`/${nft.collection_address}/${
+                      nft.token_id ? nft.token_id : ""
+                    }`}
+                  >
+                    <img className="image" src={nft.image} alt="loading..." />
+                  </Link>
+                  <h3>
+                    Name : {nft.name} {nft.token_id ? "#" + nft.token_id : ""}
+                  </h3>
+                </Item>
+              </div>
+            );
+          });
+        })}
       </StyledList>
     </div>
   );

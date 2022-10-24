@@ -54,15 +54,15 @@ export default function Collection() {
   const params = useParams();
   const [metadata, setMetadata] = useState({});
   const viewMenu = [
-    { value: undefined, label: "모든 NFT" },
-    { value: "listed", label: "리스팅된 NFT" },
-    { value: "rented", label: "대여중인 NFT" },
+    { value: '', label: "모든 NFT" },
+    { value: "rentinfo.renter_address is NULL", label: "리스팅된 NFT" },
+    { value: "rentinfo.renter_address is NOT NULL", label: "대여중인 NFT" },
   ];
 
   const sortMenu = [
-    { value: "token_id", label: "ID 정렬" },
-    { value: "maxrent_duration", label: "최대 대여기간 정렬" },
-    { value: "rent_fee_per_block", label: "대여료 정렬" },
+    { value: "ORDER BY nft.token_id", label: "ID 정렬" },
+    { value: "ORDER BY rentinfo.maxrent_duration", label: "최대 대여기간 정렬" },
+    { value: "ORDER BY rentinfo.rent_fee_per_block", label: "대여료 정렬" },
   ];
 
   async function fetchNFTlist() {
@@ -99,6 +99,7 @@ export default function Collection() {
       </div>
       <div className="list">
         <Itemlist
+          searchText={"토큰ID로 검색"}
           category={"collection"}
           subject={"nfts"}
           detail={params.collectionAddress}

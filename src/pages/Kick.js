@@ -30,7 +30,7 @@ export default function Kick() {
     <StyledKick>
       <p className="Title">Kicklist</p>
       <div className="list">
-        <Kicklist category={"NFT"} subject={"kicklist"}/>
+        <Kicklist category={"nft"} subject={"kicklist"}/>
       </div>
     </StyledKick>
   );

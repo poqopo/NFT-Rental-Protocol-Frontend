@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Select from "react-select";
+import Search from "./Search";
 
 const StyledMenu = styled.div`
   width: 90%;
@@ -28,10 +29,14 @@ export default function Menu({
   selectedViewMenu,
   selectedSortmenu,
   menuVisible,
+  text
 }) {
-
   return (
     <StyledMenu menuVisible={menuVisible}>
+      <div style={{ width: "30%", minWidth: "400px" }}>
+        <Search text={text}/>
+      </div>
+
       <Select
         className="item"
         defaultValue={selectedViewMenu}

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Button from "./Button";
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 const StyledList = styled.div`
   margin: auto;
@@ -20,15 +20,15 @@ const Item = styled.div`
   text-align: start;
   font-size: 12px;
   font-weight: 400;
-  padding : 1px;
-  border-radius : 15px;
+  padding: 1px;
+  border-radius: 15px;
   box-shadow: 5px 5px 5px gray;
   transform: scale(1);
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);
   -o-transform: scale(1);
-  transition: all 0.3s ease-in-out; 
+  transition: all 0.3s ease-in-out;
 
   & .imagelayout {
     width: 25%;
@@ -37,7 +37,7 @@ const Item = styled.div`
   & .image {
     width: 100%;
     height: auto;
-    border-radius : 15px;
+    border-radius: 15px;
   }
 
   & .text {
@@ -66,75 +66,96 @@ const Item = styled.div`
 `;
 
 export default function Kicklist({ category, subject, detail }) {
-  const [kicklist, setKicklist] = useState([]);
   const [block, setBlock] = useState(10);
 
-  async function fetchKicklist() {
-    const url =
-      process.env.REACT_APP_API_URL +
-      `/${category}/${subject}/${detail ? detail : ""}`;
-    return await (
-      await axios.get(url)
-    ).data;
-  }
-
-  useQuery("kicklist", fetchKicklist, {
-    refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-    retry: 0, // 실패시 재호출 몇번 할지
-    onSuccess: data => {
-      setKicklist(data)
-    },
-    onError: e => {
-      // 실패시 호출 (401, 404 같은 error가 아니라 정말 api 호출이 실패한 경우만 호출됩니다.)
-      // 강제로 에러 발생시키려면 api단에서 throw Error 날립니다. (참조: https://react-query.tanstack.com/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default)
-      console.log(e.message);
+  const { data, fetchNextPage } = useInfiniteQuery(
+    ["itemlist"],
+    ({ pageParam = 1 }) =>
+      axios.get(
+        process.env.REACT_APP_API_URL +
+          `/nft/kicklist?page=${pageParam}&size=20`
+      ),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        return allPages.length + 1;
+      },
     }
-  });
+  );
 
-  
+  const observeRef = useRef();
+  const ref = useRef(null);
+  const intersectionObserver = (entries, io) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        io.unobserve(entry.target);
+        fetchNextPage();
+      }
+    });
+  };
+  useEffect(() => {
+    if (observeRef.current) {
+      observeRef.current.disconnect();
+    }
+    observeRef.current = new IntersectionObserver(intersectionObserver);
+    ref.current && observeRef.current.observe(ref.current);
+  }, [data]);
+
   return (
     <StyledList>
-      {kicklist.map((data, index) => (
-        <div key={index}>
-          <Item>
-            <div className="imagelayout">
-              <Link
-                to={`/${data.collection_address}/${
-                  data.token_id ? data.token_id : ""
-                }`}
-              >
-                <img className="image" src={data.image} alt="loading..." />
-              </Link>
+      {data?.pages.map((page, pageIndex) => {
+        const list = page.data;
+        return list.map((nft, index) => {
+          return (
+            <div
+              key={index}
+              ref={
+                list.length * pageIndex + index ===
+                data.pages.length * list.length - 1
+                  ? ref
+                  : null
+              }
+            >
+              <Item>
+                <div className="imagelayout">
+                  <Link
+                    to={`/${nft.collection_address}/${
+                      nft.token_id ? nft.token_id : ""
+                    }`}
+                  >
+                    <img className="image" src={nft.image} alt="loading..." />
+                  </Link>
+                </div>
+                <div className="text">
+                  <Link
+                    to={`/${nft.collection_address}/${
+                      nft.token_id ? nft.token_id : ""
+                    }`}
+                  >
+                    <p>
+                      이름 : {nft.name} {nft.token_id ? nft.token_id : ""}
+                    </p>
+                    <p>대여자 : {nft.renter_address}</p>
+                    {block >=
+                    parseInt(nft.rent_block) + parseInt(nft.rent_duration) ? (
+                      <p>Kick 할 수 있습니다</p>
+                    ) : (
+                      <p>
+                        남은 시간 :{" "}
+                        {parseInt(nft.rent_duration) +
+                          parseInt(nft.rent_block) -
+                          block}
+                      </p>
+                    )}
+                  </Link>
+                </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Button className="box" text={"Kick!"}></Button>
+                </div>
+              </Item>
             </div>
-            <div className="text">
-              <Link
-                to={`/${data.collection_address}/${
-                  data.token_id ? data.token_id : ""
-                }`}
-              >
-                <p>
-                  이름 : {data.name} {data.token_id ? data.token_id : ""}
-                </p>
-                <p>대여자 : {data.renter_address}</p>
-                {block >=
-                parseInt(data.rent_block) + parseInt(data.rent_duration) ? (
-                  <p>Kick 할 수 있습니다</p>
-                ) : (
-                  <p>
-                    남은 시간 :{" "}
-                    {parseInt(data.rent_duration) +
-                      parseInt(data.rent_block) -
-                      block}
-                  </p>
-                )}
-              </Link>
-            </div>
-            <div style={{display : "flex", alignItems : "center"}}>
-              <Button className="box" text={"Kick!"}></Button>
-            </div>
-          </Item>
-        </div>
-      ))}
+          );
+        });
+      })}
     </StyledList>
   );
 }

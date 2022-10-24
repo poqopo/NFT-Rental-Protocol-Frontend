@@ -15,6 +15,8 @@ const StyledHeader = styled.div`
   z-index: 1;
   display: grid;
   grid-template-columns: 200px 1fr 1fr;
+  background-color: rgba(250, 259, 255, 0.9);
+  box-shadow: 3px 3px 3px gray;
 
   & .Logo {
     margin: auto;
@@ -45,11 +47,10 @@ const StyledHeader = styled.div`
     text-transform: uppercase;
   }
   a:hover {
-    background: #03e9f4;
+    background: rgba(43, 45, 55, 0.6);
     color: #fff;
     border-radius: 5px;
-    box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
-      0 0 100px #03e9f4;
+    transition: 0.3s ease all;
   }
 
   & .explore {
@@ -61,22 +62,20 @@ const StyledHeader = styled.div`
 
 const ConnectWallet = styled.button`
   margin: auto;
-  padding: 1em 1.5em;
   width: 154px;
   height: 54px;
   border: 0;
   border-radius: 6px;
   font-size: 16px;
   font-weight: 500;
-  text-align : center;
+  text-align : top;
   background-color: transparent;
   &:hover {
-    background: #03e9f4;
+    background: rgba(43, 45, 55, 0.6);
     color: #fff;
     border-radius: 5px;
-    box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
-      0 0 100px #03e9f4;
     cursor: pointer;
+    transition: 0.3s ease all;
   }
 `;
 
@@ -86,6 +85,7 @@ export default function Header() {
     window.klaytn ? window.klaytn.selectedAddress : undefined
   );
   const { pathname } = useLocation();
+  
 
   // initialize hook----------------------------
   useEffect(() => {
@@ -132,8 +132,8 @@ export default function Header() {
     <StyledHeader>
       <h3 className="Logo">Logo</h3>
       <div className="form">
-      <Input />
-      <Button text={"Search!"}/>
+        <Input />
+        <Button text={"Search!"}/>
       </div>
       
       <div className="link">
