@@ -21,24 +21,24 @@ const StyledHeader = styled.div`
   & .Logo {
     margin: auto;
     width: 100%;
-    text-align : center;
+    text-align: center;
   }
   & .form {
-    width : 80%;
-    height : 44px;
-    margin : auto;
-    display : flex;
+    width: 80%;
+    height: 44px;
+    margin: auto;
+    display: flex;
   }
 
   & .link {
     margin: auto 0;
-    display : grid;
+    display: grid;
     grid-template-columns: repeat(3, 1fr);
     place-content: space-evenly;
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;
-    text-align : center;
+    text-align: center;
   }
   a {
     color: black;
@@ -54,9 +54,8 @@ const StyledHeader = styled.div`
   }
 
   & .explore {
-    margin : auto;
-    width : 120px;
-  
+    margin: auto;
+    width: 120px;
   }
 `;
 
@@ -68,7 +67,7 @@ const ConnectWallet = styled.button`
   border-radius: 6px;
   font-size: 16px;
   font-weight: 500;
-  text-align : top;
+  text-align: top;
   background-color: transparent;
   &:hover {
     background: rgba(43, 45, 55, 0.6);
@@ -84,8 +83,8 @@ export default function Header() {
   const [currentAddress, setCurrentAddress] = useState(
     window.klaytn ? window.klaytn.selectedAddress : undefined
   );
-  const { pathname } = useLocation();
-  
+  const [input, setInput] = useState("");
+  const onChange = (e) => setInput(e.target.value);
 
   // initialize hook----------------------------
   useEffect(() => {
@@ -132,10 +131,15 @@ export default function Header() {
     <StyledHeader>
       <h3 className="Logo">Logo</h3>
       <div className="form">
-        <Input />
-        <Button text={"Search!"}/>
+        <Input onChange={onChange} text={"컬렉션 주소를 입력해주세요"} />
+        <Button
+          text={"Search!"}
+          onClick={() => {
+            window.location.replace(`${input}`);
+          }}
+        />
       </div>
-      
+
       <div className="link">
         <a className="explore" href="/">
           Explore
@@ -145,9 +149,7 @@ export default function Header() {
         </a>
         <ConnectWallet onClick={() => connectKaikas()}>
           {isWalletConnected ? (
-            <a href={`/user/${currentAddress}`}>
-              Mypage
-            </a>
+            <a href={`/user/${currentAddress}`}>Mypage</a>
           ) : (
             "Connect Wallet"
           )}
