@@ -71,6 +71,7 @@ const StyledNFT = styled.div`
     display: flex;
     align-items: center;
     place-content: space-evenly;
+    cursor : pointer;
   }
   a {
     text-decoration : none;
@@ -170,7 +171,7 @@ export default function NFT() {
               <div style={{ display: "flex", placeContent: "space-between" }}>
                 <div>
                   <div className="text">
-                    {metadata?.name} #{metadata.token_id}
+                    {metadata?.name} {metadata.token_id ? metadata?.name.includes("#") ? "" : "#" + metadata.token_id : ""}
                   </div>
                   <a
                     href={`https://baobab.scope.klaytn.com/account/${metadata?.collection_address}?tabId=txList`}
@@ -179,16 +180,13 @@ export default function NFT() {
                   </a>
                 </div>
                 <div className="icons">
-                  <GrRefresh size="24px" />
-                  <a href={metadata?.website}>
-                    <AiOutlineHome size="24px" />
-                  </a>
-                  <a href={metadata?.twitter}>
-                    <BsTwitter size="24px" />
-                  </a>
-                  <a href={metadata?.discord}>
-                    <FaDiscord size="24px" />
-                  </a>
+                  <GrRefresh size="24px" onClick={() => {
+                    window.location.reload()
+                    axios.get(process.env.REACT_APP_API_URL + `/nft/${metadata?.collection_address}/${metadata?.token_id}/getNFTmetadata`)
+                  }} />
+                    <AiOutlineHome size="24px" onClick={() => window.open(metadata?.website)} />
+                    <BsTwitter size="24px" onClick={() => window.open(metadata?.twitter)} />
+                    <FaDiscord size="24px" onClick={() => window.open(metadata?.discord)} />
                 </div>
               </div>
             </div>

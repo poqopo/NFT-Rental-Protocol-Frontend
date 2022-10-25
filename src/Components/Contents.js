@@ -72,16 +72,15 @@ export default function Contents({ rentinfo, owner }) {
   const [inputvalue, setInputvalue] = useState(0);
   const [inputdays, setInputdays] = useState(0);
   const [inputfee, setInputfee] = useState(0);
-  const [collat, setCollat] = useState("");
   const [decimal, setDecimal] = useState(1);
   const [selectedModify, setModifyOption] = useState(null);
   const [selectedCollat, setCollatOption] = useState(null);
 
   const day = 60 * 60 * 24;
   const modifyOption = [
-    { value: 1, label: "최대 대여 기간", denominator: day },
-    { value: 2, label: "담보 양", denominator: decimal },
-    { value: 3, label: "일당 대여료", denominator: decimal / day },
+    { value: 0, label: "최대 대여 기간", denominator: day },
+    { value: 1, label: "담보 양", denominator: decimal },
+    { value: 2, label: "일당 대여료", denominator: decimal / day },
   ];
   const collatOption = [
     { value: 0, label: "담보 토큰" },
@@ -175,7 +174,7 @@ export default function Contents({ rentinfo, owner }) {
                     ></Button>
                   )}
                 </div>
-              ) : rentinfo.lender_address !== currentAddress ? (
+              ) : owner !== currentAddress ? (
                 active === true ? (
                   <div className="info">
                     <p>

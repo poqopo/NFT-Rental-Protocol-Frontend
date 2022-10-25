@@ -92,7 +92,7 @@ export async function listNFT(
 export async function modifyNFT(collection, token_id, index, value) {
   try {
     await rentcontract.methods
-      .modifylist(collection, token_id, index, BigNumber(value))
+      .modifyList(collection, token_id, index, BigNumber(value))
       .send({
         from: window.klaytn.selectedAddress,
         gas: 3000000,

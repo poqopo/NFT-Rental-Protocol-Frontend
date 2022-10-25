@@ -127,7 +127,7 @@ export default function MyPage() {
   return (
     <StyledMyPage>
       <div className="background">
-        <Background url={"/background.jpg"} />
+        <Background url={"/background.png"} />
       </div>
       <Image>
         <img
@@ -143,9 +143,11 @@ export default function MyPage() {
             paddingLeft: "30px",
           }}
         >
-          <div className="Title">{metadata?.nickname}</div>
+          <div className="Title">{metadata? metadata.nickname : params.useraddress}</div>
           {currentAddress === params.useraddress ? (
-            <EditProfile />
+            <div style={{ cursor: "pointer" }}>
+              <EditProfile />
+            </div>
           ) : (
             <div></div>
           )}
@@ -191,4 +193,5 @@ export default function MyPage() {
       )}
     </StyledMyPage>
   );
+  
 }

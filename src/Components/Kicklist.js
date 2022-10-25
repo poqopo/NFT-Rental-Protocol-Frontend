@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import { useInfiniteQuery } from "react-query";
+import { kickNFT } from "../Utils/Contract";
 
 const StyledList = styled.div`
   margin: auto;
@@ -132,7 +133,7 @@ export default function Kicklist({ category, subject, detail }) {
                     }`}
                   >
                     <p>
-                      이름 : {nft.name} {nft.token_id ? nft.token_id : ""}
+                      이름 : {nft.name} {nft.token_id ? nft?.name.includes("#") ? "" : "#" + nft.token_id : ""}
                     </p>
                     <p>대여자 : {nft.renter_address}</p>
                     {block >=
@@ -149,7 +150,13 @@ export default function Kicklist({ category, subject, detail }) {
                   </Link>
                 </div>
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <Button className="box" text={"Kick!"}></Button>
+                  <Button
+                    className="box"
+                    text={"Kick!"}
+                    onClick={() =>
+                      kickNFT(nft.collection_address, nft.token_id)
+                    }
+                  />
                 </div>
               </Item>
             </div>

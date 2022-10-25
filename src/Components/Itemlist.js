@@ -137,7 +137,7 @@ export default function Itemlist({
                     <img className="image" src={nft.image} alt="loading..." />
                   </Link>
                   <h3>
-                    Name : {nft.name} {nft.token_id ? "#" + nft.token_id : ""}
+                    Name : {nft.name} {nft.token_id ? nft?.name.includes("#") ? "" : "#" + nft.token_id : ""}
                   </h3>
                 </Item>
               </div>

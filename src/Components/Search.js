@@ -10,15 +10,15 @@ const StyledForm = styled.div`
   margin: auto; 
   display: flex;
 `;
-export default function Search({text}) {
+export default function Search({inputtext, buttontext}) {
     const [input, setInput] = useState();
     const onChange = (e) => setInput(e.target.value)
     const navigate = useNavigate()
 
   return (
     <StyledForm>
-      <Input text={text} onChange={onChange}/>
-      <Button text={"Search!"} onClick={() => navigate(`${input}`)}/>
+      <Input text={inputtext} onChange={onChange}/>
+      <Button text={buttontext} onClick={() => navigate(`${input}`)}/>
     </StyledForm>
   );
 }

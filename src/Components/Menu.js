@@ -34,7 +34,7 @@ export default function Menu({
   return (
     <StyledMenu menuVisible={menuVisible}>
       <div style={{ width: "30%", minWidth: "400px" }}>
-        <Search text={text}/>
+        <Search inputtext={text} buttontext={"Search!"}/>
       </div>
 
       <Select
