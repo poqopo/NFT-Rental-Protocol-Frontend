@@ -7,7 +7,7 @@ import BigNumber from "bignumber.js";
 const caver = new Caver(window.klaytn);
 const rentcontract = new caver.klay.Contract(
   rentjson.abi,
-  "0x208291a2279882Cb6aC238977735eddd5d6e283C"
+  "0x0791183290153A0D953712dB28907Ee58A1F0000"
 );
 
 export async function approve(collection, tokenid) {
@@ -72,7 +72,7 @@ export async function listNFT(
 ) {
   try {
     await rentcontract.methods
-      .listNFT(
+      .NFTlist(
         collection,
         tokenid,
         collat,

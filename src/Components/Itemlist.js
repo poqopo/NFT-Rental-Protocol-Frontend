@@ -115,6 +115,7 @@ export default function Itemlist({
       />
       <StyledList>
         {data?.pages.map((page, pageIndex) => {
+          
           const list = page.data;
           return list.map((nft, index) => {
             return (
@@ -126,7 +127,9 @@ export default function Itemlist({
                     ? ref
                     : null
                 }
+                
               >
+                
                 
                 <Item>
                   <Link

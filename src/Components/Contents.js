@@ -15,8 +15,9 @@ import {
   withdrawCollat,
   kickNFT,
 } from "../Utils/Contract";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Select from "react-select";
+import BigNumber from "bignumber.js";
 
 const StyledContents = styled.div`
   width: 100%;
@@ -75,16 +76,18 @@ export default function Contents({ rentinfo, owner }) {
   const [decimal, setDecimal] = useState(1);
   const [selectedModify, setModifyOption] = useState(null);
   const [selectedCollat, setCollatOption] = useState(null);
+  const params = useParams()
 
   const day = 60 * 60 * 24;
   const modifyOption = [
-    { value: 0, label: "최대 대여 기간", denominator: day },
-    { value: 1, label: "담보 양", denominator: decimal },
-    { value: 2, label: "일당 대여료", denominator: decimal / day },
+    { value : 0, label : "담보 토큰", },
+    { value: 1, label: "최대 대여 기간", denominator: 1 / day },
+    { value: 2, label: "담보 양", denominator: decimal },
+    { value: 3, label: "일당 대여료", denominator: decimal }
   ];
   const collatOption = [
     { value: 0, label: "담보 토큰" },
-    { value: 1, label: "KUSDT" },
+    { value: "0x9466a45072E91ff5AbA7e084E5ea74531f09731a", label: "KUSDT", decimal : 10 **18 },
     { value: 2, label: "WKLAY" },
     { value: 3, label: "KUSDC" },
   ];
@@ -255,8 +258,9 @@ export default function Contents({ rentinfo, owner }) {
                         modifyNFT(
                           rentinfo.collection_address,
                           rentinfo.token_id,
-                          1,
-                          inputvalue
+                          selectedModify.value,
+                          (selectedModify.value === 0 ? inputvalue : 
+                            parseInt(inputvalue * selectedModify.denominator))
                         )
                       }
                     />
@@ -312,15 +316,16 @@ export default function Contents({ rentinfo, owner }) {
             <Button
               style={{}}
               text={"List!"}
-              onClick={() =>
+              onClick={() =>{
                 listNFT(
-                  rentinfo.collection_address,
-                  rentinfo.token_id,
-                  selectedCollat.address,
-                  inputdays,
-                  inputvalue,
-                  inputfee
+                  params.collectionAddress,
+                  params.token_id,
+                  selectedCollat.value,
+                  inputdays * day,
+                  BigNumber(inputvalue * selectedCollat.decimal),
+                  BigNumber(inputfee * selectedCollat.decimal)
                 )
+              }
               }
             ></Button>
           </div>
