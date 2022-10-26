@@ -143,7 +143,9 @@ export default function MyPage() {
             paddingLeft: "30px",
           }}
         >
-          <div className="Title">{metadata? metadata.nickname : params.useraddress}</div>
+          <div className="Title">
+            {metadata ? metadata.nickname : params.useraddress}
+          </div>
           {currentAddress === params.useraddress ? (
             <div style={{ cursor: "pointer" }}>
               <EditProfile />
@@ -193,5 +195,4 @@ export default function MyPage() {
       )}
     </StyledMyPage>
   );
-  
 }

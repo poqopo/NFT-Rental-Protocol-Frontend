@@ -14,6 +14,8 @@ import {
   returnNFT,
   withdrawCollat,
   kickNFT,
+  viewNFTApprove,
+  nftApprove,
 } from "../Utils/Contract";
 import { Link, useParams } from "react-router-dom";
 import Select from "react-select";
@@ -69,6 +71,7 @@ const StyledContents = styled.div`
 
 export default function Contents({ rentinfo, owner }) {
   const [active, setIsactive] = useState(false);
+  const [nftactive, setnftActive] = useState(false);
   const [name, setName] = useState("");
   const [inputvalue, setInputvalue] = useState(0);
   const [inputdays, setInputdays] = useState(0);
@@ -76,18 +79,22 @@ export default function Contents({ rentinfo, owner }) {
   const [decimal, setDecimal] = useState(1);
   const [selectedModify, setModifyOption] = useState(null);
   const [selectedCollat, setCollatOption] = useState(null);
-  const params = useParams()
+  const params = useParams();
 
   const day = 60 * 60 * 24;
   const modifyOption = [
-    { value : 0, label : "담보 토큰", },
-    { value: 1, label: "최대 대여 기간", denominator: 1 / day },
-    { value: 2, label: "담보 양", denominator: decimal },
-    { value: 3, label: "일당 대여료", denominator: decimal }
+    { value: 0, label: "담보 토큰" },
+    { value: 1, label: "최대 대여 기간", denominator: day },
+    { value: 2, label: "담보 양", denominator: 10 ** decimal },
+    { value: 3, label: "일당 대여료", denominator: 10 ** decimal },
   ];
   const collatOption = [
     { value: 0, label: "담보 토큰" },
-    { value: "0x9466a45072E91ff5AbA7e084E5ea74531f09731a", label: "KUSDT", decimal : 10 **18 },
+    {
+      value: "0x9466a45072E91ff5AbA7e084E5ea74531f09731a",
+      label: "KUSDT",
+      decimal: 10 ** 18,
+    },
     { value: 2, label: "WKLAY" },
     { value: 3, label: "KUSDC" },
   ];
@@ -96,18 +103,24 @@ export default function Contents({ rentinfo, owner }) {
     ? window.klaytn.selectedAddress
     : "";
 
-  async function getInfo() {
-    const here = await viewTokenapprove(rentinfo.collateral_token);
-    setIsactive(here > 0);
+  async function getRentInfo() {
+    setnftActive(await viewNFTApprove(params.collectionAddress));
+    setIsactive((await viewTokenapprove(rentinfo.collateral_token)) > 0);
     setName(await viewTokenname(rentinfo.collateral_token));
     setDecimal(await viewDecimal(rentinfo.collateral_token));
   }
 
+  async function getListInfo() {
+    setnftActive(await viewNFTApprove(params.collectionAddress));
+  }
+
   useEffect(() => {
     if (rentinfo.collateral_token !== undefined) {
-      getInfo();
+      getRentInfo();
+    } else {
+      getListInfo();
     }
-  }, [rentinfo]);
+  }, [getRentInfo, getListInfo]);
 
   const inputChange = (e) => setInputvalue(e.target.value);
   const dayChange = (e) => setInputdays(e.target.value);
@@ -130,7 +143,8 @@ export default function Contents({ rentinfo, owner }) {
               days
             </p>
             <p>
-              대여료 : {Math.round(rentinfo.rent_fee_per_block / 10 ** decimal)}{" "}
+              대여료 :{" "}
+              {Math.round((rentinfo.rent_fee_per_block * day) / 10 ** decimal)}{" "}
               {name} per day
             </p>
           </div>
@@ -165,7 +179,7 @@ export default function Contents({ rentinfo, owner }) {
                         }
                       ></Button>
                     )
-                  ) : (
+                  ) : nftactive ? (
                     <Button
                       text={"Return!"}
                       onClick={() =>
@@ -174,6 +188,11 @@ export default function Contents({ rentinfo, owner }) {
                           rentinfo.token_id
                         )
                       }
+                    ></Button>
+                  ) : (
+                    <Button
+                      text={"Approve!"}
+                      onClick={() => nftApprove(params.collectionAddress)}
                     ></Button>
                   )}
                 </div>
@@ -186,14 +205,19 @@ export default function Contents({ rentinfo, owner }) {
                       token
                     </p>
                     <p>
-                      대여료 : {inputvalue} {name}
+                      대여료 :{" "}
+                      {Math.round(
+                        (rentinfo.rent_fee_per_block * day) / 10 ** decimal
+                      )}{" "}
+                      {name}
                     </p>
                     <p>
                       총 대여료 :{" "}
-                      {parseInt(inputvalue) +
-                        Math.round(
-                          rentinfo.collateral_amount / 10 ** decimal
-                        )}{" "}
+                      {Math.round(
+                        rentinfo.collateral_amount / 10 ** decimal +
+                          (rentinfo.rent_fee_per_block * day * inputvalue) /
+                            10 ** decimal
+                      )}{" "}
                       {name}
                     </p>
                     <div
@@ -215,7 +239,7 @@ export default function Contents({ rentinfo, owner }) {
                           rentNFT(
                             rentinfo.collection_address,
                             rentinfo.token_id,
-                            inputvalue
+                            inputvalue * day
                           )
                         }
                       />
@@ -239,7 +263,7 @@ export default function Contents({ rentinfo, owner }) {
                       display: "grid",
                       gridTemplateColumns: "1fr 2fr 1fr",
                       gridGap: "10px",
-                      placeContent : "start"
+                      placeContent: "start",
                     }}
                   >
                     <Select
@@ -259,8 +283,9 @@ export default function Contents({ rentinfo, owner }) {
                           rentinfo.collection_address,
                           rentinfo.token_id,
                           selectedModify.value,
-                          (selectedModify.value === 0 ? inputvalue : 
-                            parseInt(inputvalue * selectedModify.denominator))
+                          selectedModify.value === 0
+                            ? inputvalue
+                            : parseInt(inputvalue * selectedModify.denominator)
                         )
                       }
                     />
@@ -281,7 +306,7 @@ export default function Contents({ rentinfo, owner }) {
         </div>
       ) : owner === currentAddress ? (
         <div>
-                    <div className="info">
+          <div className="info">
             <h3>아래 빈칸을 채운 후 List버튼을 눌러 NFT를 리스팅 하세요!</h3>
           </div>
           <div className="list">
@@ -313,21 +338,29 @@ export default function Contents({ rentinfo, owner }) {
               />
               <p>{selectedCollat ? selectedCollat.label : "tokens"}</p>
             </div>
-            <Button
-              style={{}}
-              text={"List!"}
-              onClick={() =>{
-                listNFT(
-                  params.collectionAddress,
-                  params.token_id,
-                  selectedCollat.value,
-                  inputdays * day,
-                  BigNumber(inputvalue * selectedCollat.decimal),
-                  BigNumber(inputfee * selectedCollat.decimal)
-                )
-              }
-              }
-            ></Button>
+            {nftactive ? (
+              <Button
+                style={{}}
+                text={"List!"}
+                onClick={() => {
+                  listNFT(
+                    params.collectionAddress,
+                    params.token_id,
+                    selectedCollat.value,
+                    inputdays * day,
+                    BigNumber(inputvalue * selectedCollat.decimal),
+                    BigNumber(
+                      parseInt((inputfee * selectedCollat.decimal) / day)
+                    )
+                  );
+                }}
+              ></Button>
+            ) : (
+              <Button
+                text={"Approve!"}
+                onClick={() => nftApprove(params.collectionAddress)}
+              ></Button>
+            )}
           </div>
         </div>
       ) : (

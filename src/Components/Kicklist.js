@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import { useInfiniteQuery } from "react-query";
-import { kickNFT } from "../Utils/Contract";
+import { getBlock, getGracePeriod, kickNFT } from "../Utils/Contract";
 
 const StyledList = styled.div`
   margin: auto;
@@ -68,6 +68,7 @@ const Item = styled.div`
 
 export default function Kicklist({ category, subject, detail }) {
   const [block, setBlock] = useState(10);
+  const [grace_period, setGracePeriod] = useState(60 * 60 * 24);
 
   const { data, fetchNextPage } = useInfiniteQuery(
     ["itemlist"],
@@ -101,6 +102,15 @@ export default function Kicklist({ category, subject, detail }) {
     ref.current && observeRef.current.observe(ref.current);
   }, [data]);
 
+  async function getInfo() {
+    setBlock(await getBlock());
+    setGracePeriod(await getGracePeriod());
+  }
+
+  useEffect(() => {
+    getInfo();
+  }, [getInfo]);
+
   return (
     <StyledList>
       {data?.pages.map((page, pageIndex) => {
@@ -133,31 +143,46 @@ export default function Kicklist({ category, subject, detail }) {
                     }`}
                   >
                     <p>
-                      이름 : {nft.name} {nft.token_id ? nft?.name.includes("#") ? "" : "#" + nft.token_id : ""}
+                      이름 : {nft.name}{" "}
+                      {nft.token_id
+                        ? nft?.name.includes("#")
+                          ? ""
+                          : "#" + nft.token_id
+                        : ""}
                     </p>
                     <p>대여자 : {nft.renter_address}</p>
                     {block >=
-                    parseInt(nft.rent_block) + parseInt(nft.rent_duration) ? (
+                    Number(nft.rent_block) +
+                      Number(nft.rent_duration) +
+                      Number(grace_period) ? (
                       <p>Kick 할 수 있습니다</p>
                     ) : (
                       <p>
                         남은 시간 :{" "}
-                        {parseInt(nft.rent_duration) +
-                          parseInt(nft.rent_block) -
+                        {Number(nft.rent_duration) +
+                          Number(nft.rent_block) +
+                          Number(grace_period) -
                           block}
                       </p>
                     )}
                   </Link>
                 </div>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Button
-                    className="box"
-                    text={"Kick!"}
-                    onClick={() =>
-                      kickNFT(nft.collection_address, nft.token_id)
-                    }
-                  />
-                </div>
+                {block >=
+                Number(nft.rent_block) +
+                  Number(nft.rent_duration) +
+                  Number(grace_period) ? (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Button
+                      className="box"
+                      text={"Kick!"}
+                      onClick={() =>
+                        kickNFT(nft.collection_address, nft.token_id)
+                      }
+                    />
+                  </div>
+                ) : (
+                  <div></div>
+                )}
               </Item>
             </div>
           );

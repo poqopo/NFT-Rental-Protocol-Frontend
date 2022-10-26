@@ -10,14 +10,14 @@ const rentcontract = new caver.klay.Contract(
   "0x0791183290153A0D953712dB28907Ee58A1F0000"
 );
 
-export async function approve(collection, tokenid) {
+export async function nftApprove(collection) {
   try {
     const collection_address = new caver.klay.Contract(
       erc721json.abi,
       collection
     );
     await collection_address.methods
-      .approve(rentcontract._address, tokenid)
+      .setApprovalForAll(rentcontract._address, true)
       .send({
         from: window.klaytn.selectedAddress,
         gas: 3000000,
@@ -25,6 +25,12 @@ export async function approve(collection, tokenid) {
   } catch (e) {
     console.log(e);
   }
+}
+export async function viewNFTApprove(contract) {
+  const collection_address = await new caver.klay.Contract(erc721json.abi, contract);
+  return await collection_address.methods
+    .isApprovedForAll(window.klaytn.selectedAddress, rentcontract._address)
+    .call();
 }
 export async function tokenApprove(contract) {
   const MAX_UNIT = 2 ** 256 /10;
@@ -58,10 +64,6 @@ export async function viewDecimal(collateral_address) {
   return await contract.methods.decimals().call();
 }
 
-
-
-
-
 export async function listNFT(
   collection,
   tokenid,
@@ -90,6 +92,7 @@ export async function listNFT(
 }
 
 export async function modifyNFT(collection, token_id, index, value) {
+  console.log(value)
   try {
     await rentcontract.methods
       .modifyList(collection, token_id, index, BigNumber(value))
@@ -137,7 +140,7 @@ export async function returnNFT(collection, tokenid) {
 
 export async function withdrawCollat(collection, tokenid) {
   try {
-    await rentcontract.methods.withdrawcollateral(collection, tokenid).send({
+    await rentcontract.methods.withdrawCollateral(collection, tokenid).send({
       from: window.klaytn.selectedAddress,
       gas: 3000000,
     });
@@ -155,6 +158,15 @@ export async function kickNFT(collection, tokenid) {
   } catch (e) {
     console.log(e);
   }
+}
+
+export async function getBlock() {
+ return await caver.klay.getBlockNumber()
+}
+export async function getGracePeriod() {
+  return await rentcontract.methods
+    .viewExcutiondelay()
+    .call();
 }
 
 export async function daytoblock(day) {

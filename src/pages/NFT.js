@@ -105,7 +105,7 @@ const StyledActivity = styled.div`
 
   & .item {
     display: grid;
-    grid-template-columns: repeat(5, 20%);
+    grid-template-columns: repeat(3, 33%);
     grid-row-gap: 50px;
     text-align: center;
     padding: 5px;
@@ -218,20 +218,14 @@ export default function NFT() {
           <div className="item">
             <p>Event</p>
             <p>From</p>
-
             <p>Block</p>
-            <p>Collateral_amount</p>
-            <p>Rent_fee</p>
           </div>
           {activity ? (
             activity.map((data, index) => (
               <div className="item" key={index}>
                 <p>{data.event}</p>
                 <p>{data.from}</p>
-
                 <p>{data.block}</p>
-                <p>{data.collateral_amount}</p>
-                <p>{data.rent_fee}</p>
               </div>
             ))
           ) : (
