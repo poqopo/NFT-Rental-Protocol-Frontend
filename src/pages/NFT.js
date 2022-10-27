@@ -184,9 +184,9 @@ export default function NFT() {
                     window.location.reload()
                     axios.get(process.env.REACT_APP_API_URL + `/nft/${metadata?.collection_address}/${metadata?.token_id}/getNFTmetadata`)
                   }} />
-                    <AiOutlineHome size="24px" onClick={() => console.log(1)} />
-                    <BsTwitter size="24px" onClick={() => console.log(2)} />
-                    <FaDiscord size="24px" onClick={() => console.log(3)} />
+                    <AiOutlineHome size="24px" onClick={() => window.open(metadata.website)} />
+                    <BsTwitter size="24px" onClick={() => window.open(metadata.twitter)} />
+                    <FaDiscord size="24px" onClick={() => window.open(metadata.discord)} />
                 </div>
               </div>
             </div>

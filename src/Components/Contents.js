@@ -75,7 +75,7 @@ const StyledContents = styled.div`
 export default function Contents({ rentinfo, owner }) {
   const [active, setIsactive] = useState(false);
   const [nftactive, setnftActive] = useState(false);
-  const [block, setBlock] = useState(2**256/10);
+  const [block, setBlock] = useState(2 ** 256 / 10);
   const [grace_period, setGracePeriod] = useState();
   const [name, setName] = useState("");
   const [inputvalue, setInputvalue] = useState(0);
@@ -104,8 +104,6 @@ export default function Contents({ rentinfo, owner }) {
     { value: 3, label: "KUSDC" },
   ];
 
-  
-
   const currentAddress = window.klaytn.selectedAddress
     ? window.klaytn.selectedAddress
     : "";
@@ -121,7 +119,7 @@ export default function Contents({ rentinfo, owner }) {
     setnftActive(await viewNFTApprove(params.collectionAddress));
   }
   async function getBlockNumber() {
-    setBlock(await getBlock())
+    setBlock(await getBlock());
     setGracePeriod(await getGracePeriod());
   }
 
@@ -164,19 +162,20 @@ export default function Contents({ rentinfo, owner }) {
             <div>
               {rentinfo.renter_address ? (
                 <div className="info">
-                  <p>대여자 : {rentinfo.renter_address}</p>
+                  <Link to={`/user/${rentinfo.renter_address}`}>
+                    대여자 : {rentinfo.renter_address}
+                  </Link>
                   <p>
                     대여 기간 : {Math.round(rentinfo.rent_duration / day)} days
                     ( from {rentinfo.rent_block} )
                   </p>
                   {rentinfo.renter_address !== currentAddress ? (
                     rentinfo.lender_address !== currentAddress ? (
-
-                      (block >=
-                        Number(rentinfo.rent_block) +
-                          Number(rentinfo.rent_duration) +
-                          Number(grace_period) ? 
-                          <Button
+                      block >=
+                      Number(rentinfo.rent_block) +
+                        Number(rentinfo.rent_duration) +
+                        Number(grace_period) ? (
+                        <Button
                           text={"Kick!"}
                           onClick={() =>
                             kickNFT(
@@ -185,10 +184,18 @@ export default function Contents({ rentinfo, owner }) {
                             )
                           }
                         ></Button>
-                        :
-                        <Timer block={block} rent_duration={rentinfo.rent_duration} rent_block={rentinfo.rent_block} grace_period={grace_period}/> )
-
-                    ) : (
+                      ) : (
+                        <Timer
+                          block={block}
+                          rent_duration={rentinfo.rent_duration}
+                          rent_block={rentinfo.rent_block}
+                          grace_period={grace_period}
+                        />
+                      )
+                    ) : block >=
+                      Number(rentinfo.rent_block) +
+                        Number(rentinfo.rent_duration) +
+                        Number(grace_period) ? (
                       <Button
                         text={"Withdraw!"}
                         onClick={() =>
@@ -198,6 +205,13 @@ export default function Contents({ rentinfo, owner }) {
                           )
                         }
                       ></Button>
+                    ) : (
+                      <Timer
+                        block={block}
+                        rent_duration={rentinfo.rent_duration}
+                        rent_block={rentinfo.rent_block}
+                        grace_period={grace_period}
+                      />
                     )
                   ) : nftactive ? (
                     <Button

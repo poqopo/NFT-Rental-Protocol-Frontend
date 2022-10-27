@@ -6,7 +6,6 @@ const intToString = (num) => {
 
 const Timer = ({ block, rent_duration, rent_block, grace_period }) => {
   let count = useRef(Number(rent_duration) + Number(rent_block) + Number(grace_period) -  Number(block));
-  const interval = useRef(null);
   const [day, setDay] = useState('')
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
@@ -19,13 +18,16 @@ const Timer = ({ block, rent_duration, rent_block, grace_period }) => {
   }, [block, grace_period])
 
   useEffect(() => {
-    interval.current = setInterval(() => {
-        count.current -= 0.5;
+    const timer = setInterval(() => {
+      console.log(1)
+        count.current -= 1;
       setDay(intToString(parseInt(count.current / 3600 / 24)))
       setHour(intToString(parseInt(count.current % (3600 * 24) / 3600)));
       setMinute(intToString(parseInt((count.current % 3600) / 60)));
       setSecond(intToString((count.current % 60)));
     }, 1000);
+
+    return () => {clearInterval(timer)}
   }, [count]);
 
   return (
