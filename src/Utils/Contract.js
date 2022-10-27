@@ -178,15 +178,12 @@ export async function getGracePeriod() {
     .viewExcutiondelay()
     .call();
 }
-
+export async function viewAmount(amount) {
+  return await Math.round(amount * 100) / 100;
+}
 export async function daytoblock(day) {
   return await day * 60 * 60 * 24;
 }
-
 export async function blockToday(block) {
   return await Math.round(block / 60 / 60 / 24);
-}
-
-export async function viewAmount(amount) {
-  return await Math.round(amount * 100) / 100;
 }

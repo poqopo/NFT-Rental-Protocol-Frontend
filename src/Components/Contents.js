@@ -16,10 +16,13 @@ import {
   kickNFT,
   viewNFTApprove,
   nftApprove,
+  getBlock,
+  getGracePeriod,
 } from "../Utils/Contract";
 import { Link, useParams } from "react-router-dom";
 import Select from "react-select";
 import BigNumber from "bignumber.js";
+import Timer from "./Timer";
 
 const StyledContents = styled.div`
   width: 100%;
@@ -72,6 +75,8 @@ const StyledContents = styled.div`
 export default function Contents({ rentinfo, owner }) {
   const [active, setIsactive] = useState(false);
   const [nftactive, setnftActive] = useState(false);
+  const [block, setBlock] = useState(2**256/10);
+  const [grace_period, setGracePeriod] = useState();
   const [name, setName] = useState("");
   const [inputvalue, setInputvalue] = useState(0);
   const [inputdays, setInputdays] = useState(0);
@@ -99,6 +104,8 @@ export default function Contents({ rentinfo, owner }) {
     { value: 3, label: "KUSDC" },
   ];
 
+  
+
   const currentAddress = window.klaytn.selectedAddress
     ? window.klaytn.selectedAddress
     : "";
@@ -113,14 +120,19 @@ export default function Contents({ rentinfo, owner }) {
   async function getListInfo() {
     setnftActive(await viewNFTApprove(params.collectionAddress));
   }
+  async function getBlockNumber() {
+    setBlock(await getBlock())
+    setGracePeriod(await getGracePeriod());
+  }
 
   useEffect(() => {
     if (rentinfo.collateral_token !== undefined) {
       getRentInfo();
+      getBlockNumber();
     } else {
       getListInfo();
     }
-  }, [getRentInfo, getListInfo]);
+  }, [getRentInfo, getListInfo, getBlockNumber]);
 
   const inputChange = (e) => setInputvalue(e.target.value);
   const dayChange = (e) => setInputdays(e.target.value);
@@ -159,15 +171,23 @@ export default function Contents({ rentinfo, owner }) {
                   </p>
                   {rentinfo.renter_address !== currentAddress ? (
                     rentinfo.lender_address !== currentAddress ? (
-                      <Button
-                        text={"Kick!"}
-                        onClick={() =>
-                          kickNFT(
-                            rentinfo.collection_address,
-                            rentinfo.token_id
-                          )
-                        }
-                      ></Button>
+
+                      (block >=
+                        Number(rentinfo.rent_block) +
+                          Number(rentinfo.rent_duration) +
+                          Number(grace_period) ? 
+                          <Button
+                          text={"Kick!"}
+                          onClick={() =>
+                            kickNFT(
+                              rentinfo.collection_address,
+                              rentinfo.token_id
+                            )
+                          }
+                        ></Button>
+                        :
+                        <Timer block={block} rent_duration={rentinfo.rent_duration} rent_block={rentinfo.rent_block} grace_period={grace_period}/> )
+
                     ) : (
                       <Button
                         text={"Withdraw!"}

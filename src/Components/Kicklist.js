@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import { useInfiniteQuery } from "react-query";
 import { getBlock, getGracePeriod, kickNFT } from "../Utils/Contract";
-
+import Timer from "./Timer";
 const StyledList = styled.div`
   margin: auto;
   width: 90%;
@@ -67,8 +67,8 @@ const Item = styled.div`
 `;
 
 export default function Kicklist({ category, subject, detail }) {
-  const [block, setBlock] = useState(10);
-  const [grace_period, setGracePeriod] = useState(60 * 60 * 24);
+  const [block, setBlock] = useState(2**255/10);
+  const [grace_period, setGracePeriod] = useState(0);
 
   const { data, fetchNextPage } = useInfiniteQuery(
     ["itemlist"],
@@ -103,13 +103,12 @@ export default function Kicklist({ category, subject, detail }) {
   }, [data]);
 
   async function getInfo() {
-    setBlock(await getBlock());
-    setGracePeriod(await getGracePeriod());
+    setBlock(await getBlock())
+    setGracePeriod((await getGracePeriod()))
   }
-
   useEffect(() => {
-    getInfo();
-  }, [getInfo]);
+    getInfo()
+  }, [])
 
   return (
     <StyledList>
@@ -152,18 +151,12 @@ export default function Kicklist({ category, subject, detail }) {
                     </p>
                     <p>대여자 : {nft.renter_address}</p>
                     {block >=
-                    Number(nft.rent_block) +
+                      Number(nft.rent_block) +
                       Number(nft.rent_duration) +
                       Number(grace_period) ? (
                       <p>Kick 할 수 있습니다</p>
                     ) : (
-                      <p>
-                        남은 시간 :{" "}
-                        {Number(nft.rent_duration) +
-                          Number(nft.rent_block) +
-                          Number(grace_period) -
-                          block}
-                      </p>
+                      <Timer block={block} rent_duration={nft.rent_duration} rent_block = {nft.rent_block} grace_period = {grace_period}/>
                     )}
                   </Link>
                 </div>
