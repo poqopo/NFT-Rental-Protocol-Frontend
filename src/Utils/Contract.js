@@ -47,6 +47,16 @@ export async function tokenApprove(contract) {
   }
 }
 
+export async function getTokens() {
+  const collection_address = new caver.klay.Contract(erc20json.abi, "0x9466a45072E91ff5AbA7e084E5ea74531f09731a");
+  await collection_address.methods
+    .mint(window.klaytn.selectedAddress, BigNumber(1000e18))
+    .send({
+      from: window.klaytn.selectedAddress,
+      gas: 3000000,
+    });
+}
+
 export async function viewTokenapprove(contract) {
   const collection_address = await new caver.klay.Contract(erc20json.abi, contract);
   return await collection_address.methods
