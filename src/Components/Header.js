@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Button from "./Button";
 import Input from "./Input";
+import { networkChange } from "../reducers/network";
 
 const StyledHeader = styled.div`
   position: fixed;
@@ -33,7 +35,7 @@ const StyledHeader = styled.div`
   & .link {
     margin: auto 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     place-content: space-evenly;
     font-size: 16px;
     font-weight: 500;
@@ -79,13 +81,15 @@ const ConnectWallet = styled.button`
 `;
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const network = useSelector(state => state.network.value)
+
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(
     window.klaytn ? window.klaytn.selectedAddress : undefined
   );
   const [input, setInput] = useState("");
   const onChange = (e) => setInput(e.target.value);
-
   // initialize hook----------------------------
   useEffect(() => {
     const onLoad = async () => {
@@ -114,12 +118,14 @@ export default function Header() {
         await setCurrentAddress(accounts[0]);
         await setIsWalletConnected(true);
       });
+      window.klaytn.on("networkChanged", async function (network) {
+        dispatch(networkChange(network))
+      });
     }
 
     // clean-up 으로 event-listner 삭제
     return () => window.removeEventListener("load", onLoad);
   }, []);
-
   async function connectKaikas() {
     const response = await window.klaytn.enable();
     console.log("connect Click : ", response);
@@ -141,12 +147,14 @@ export default function Header() {
       </div>
 
       <div className="link">
+        <p>{network === 8217 ? "Klaytn Mainnet" : "Klaytn testnet"}</p>
         <a className="explore" href="/">
           Explore
         </a>
         <a className="explore" href="/Kick">
           Kick
         </a>
+
         <ConnectWallet onClick={() => connectKaikas()}>
           {isWalletConnected ? (
             <a href={`/user/${currentAddress}`}>Mypage</a>

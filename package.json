@@ -18,9 +18,11 @@
     "react-icons": "^4.6.0",
     "react-modal": "^3.16.1",
     "react-query": "^3.39.2",
+    "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
     "react-select": "^5.5.2",
+    "redux": "^4.2.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "styled-components": "^5.3.5",
@@ -32,8 +34,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy" : "aws s3 sync ./build s3://rentropy.ml --profile=poqopo",
-    "invalidate" : "aws cloudfront create-invalidation --profile=poqopo --distribution-id E39CIQHWOZNX04 --paths /*"
+    "deploy": "aws s3 sync ./build s3://rentropy.ml --profile=poqopo",
+    "invalidate": "aws cloudfront create-invalidation --profile=poqopo --distribution-id E39CIQHWOZNX04 --paths /*"
   },
   "eslintConfig": {
     "extends": [

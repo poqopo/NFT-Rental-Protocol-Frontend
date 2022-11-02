@@ -19,7 +19,6 @@ const Timer = ({ block, rent_duration, rent_block, grace_period }) => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      console.log(1)
         count.current -= 1;
       setDay(intToString(parseInt(count.current / 3600 / 24)))
       setHour(intToString(parseInt(count.current % (3600 * 24) / 3600)));

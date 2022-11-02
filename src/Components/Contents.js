@@ -109,14 +109,18 @@ export default function Contents({ rentinfo, owner }) {
     : "";
 
   async function getRentInfo() {
-    setnftActive(await viewNFTApprove(params.collectionAddress));
-    setIsactive((await viewTokenapprove(rentinfo.collateral_token)) > 0);
+    if (currentAddress !== "") {
+      setnftActive(await viewNFTApprove(params.collectionAddress));
+      setIsactive((await viewTokenapprove(rentinfo.collateral_token)) > 0);
+    }
     setName(await viewTokenname(rentinfo.collateral_token));
     setDecimal(await viewDecimal(rentinfo.collateral_token));
   }
 
   async function getListInfo() {
-    setnftActive(await viewNFTApprove(params.collectionAddress));
+    if (currentAddress !== "") {
+      setnftActive(await viewNFTApprove(params.collectionAddress));
+    }
   }
   async function getBlockNumber() {
     setBlock(await getBlock());

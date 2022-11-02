@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import Menu from "./Menu";
 import { useInfiniteQuery } from "react-query";
+import { useSelector } from "react-redux";
 
 const StyledList = styled.div`
   margin: auto;
@@ -14,8 +15,12 @@ const StyledList = styled.div`
   place-content: center;
   animation: fadeIn 1s;
   @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 `;
 const Item = styled.div`
@@ -56,11 +61,12 @@ export default function Itemlist({
   viewMenu,
   sortMenu,
   menuVisible,
-  searchText
+  searchText,
 }) {
   const [selectedViewMenu, setViewMenu] = useState();
   const [selectedSortMenu, setSortMenu] = useState();
-
+  const network = useSelector(state => state.network.value)
+  console.log(network)
   const { data, fetchNextPage } = useInfiniteQuery(
     [
       "itemlist",
@@ -115,7 +121,6 @@ export default function Itemlist({
       />
       <StyledList>
         {data?.pages.map((page, pageIndex) => {
-          
           const list = page.data;
           return list.map((nft, index) => {
             return (
@@ -127,10 +132,7 @@ export default function Itemlist({
                     ? ref
                     : null
                 }
-                
               >
-                
-                
                 <Item>
                   <Link
                     to={`/${nft.collection_address}/${
@@ -140,7 +142,12 @@ export default function Itemlist({
                     <img className="image" src={nft.image} alt="loading..." />
                   </Link>
                   <h3>
-                    Name : {nft.name} {nft.token_id ? nft?.name.includes("#") ? "" : "#" + nft.token_id : ""}
+                    Name : {nft.name}{" "}
+                    {nft.token_id
+                      ? nft?.name.includes("#")
+                        ? ""
+                        : "#" + nft.token_id
+                      : ""}
                   </h3>
                 </Item>
               </div>
